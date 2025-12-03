@@ -9,6 +9,11 @@ public class UIManager : MonoBehaviour
     public GameObject deskUpgradesPanel;
     public GameObject roomUpgradesPanel;
 
+    private void Start()
+    {
+        ShowMainMenu();
+    }
+
     private void HideAll()
     {
         mainMenuPanel.SetActive(false);
