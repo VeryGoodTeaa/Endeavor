@@ -35,6 +35,7 @@ public class InteractionManager : MonoBehaviour
     public void SetMode(int modeIndex)
     {
         currentMode = (GameMode)modeIndex;
+        Debug.Log($"Mode changed to: {currentMode}");
 
         switch (currentMode)
         {
@@ -54,6 +55,7 @@ public class InteractionManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            Debug.Log("Escape key pressed");
             SetMode(0);
             UIManager.Instance.ResetDropdown();
         }
@@ -80,6 +82,7 @@ public class InteractionManager : MonoBehaviour
 
                 if (Input.GetMouseButtonDown(0))
                 {
+                    Debug.Log($"Clicked on: {target.name}");
                     GameManager.Instance.AddAttention(GameManager.Instance.clickPower);
                     target.PlayClickAnimation();
                     UIManager.Instance.SpawnClickPopup(mousePos, GameManager.Instance.clickPower);
@@ -100,6 +103,7 @@ public class InteractionManager : MonoBehaviour
                     ClearUpgradeHover();
                     hoveredUpgradeItem = obj;
                     hoveredUpgradeItem.SetHighlight(true);
+                    Debug.Log($"Hovering over upgrade item: {obj.objectName}");
                 }
 
                 UpgradeLevelData nextLvl = obj.GetNextLevelData();
@@ -110,12 +114,12 @@ public class InteractionManager : MonoBehaviour
 
                 if (Input.GetMouseButtonDown(0))
                 {
+                    Debug.Log($"Upgrading: {obj.objectName}");
                     obj.Upgrade();
                 }
             }
             else
             {
-                // Мышь ушла с предмета улучшения
                 ClearUpgradeHover();
             }
         }
