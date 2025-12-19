@@ -49,13 +49,11 @@ public class InteractionManager : MonoBehaviour
 
     void HandleMouseInteraction()
     {
-        // Игнорируем клики, если курсор над UI
         if (EventSystem.current.IsPointerOverGameObject()) return;
 
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
 
-        // --- ЛОГИКА ОБВОДКИ (HOVER) ---
         if (currentMode != GameMode.Gameplay)
         {
             if (hit.collider != null && hit.collider.TryGetComponent(out UpgradableObject obj))
@@ -90,15 +88,11 @@ public class InteractionManager : MonoBehaviour
             UIManager.Instance.HideTooltip();
         }
 
-        // --- ЛОГИКА КЛИКА ---
         if (Input.GetMouseButtonDown(0))
         {
             if (currentMode == GameMode.Gameplay)
             {
-                // Обычный клик - добыча внимания
                 GameManager.Instance.AddAttention(GameManager.Instance.clickPower);
-
-                // Визуальный эффект (+10 Attention)
                 UIManager.Instance.SpawnClickPopup(mousePos, GameManager.Instance.clickPower);
             }
             else
