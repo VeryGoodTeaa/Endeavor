@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class ClickerScript : MonoBehaviour
 {
-    public int money;
+    public int attention;
     public TMPro.TextMeshProUGUI text;
 
     public void Click()
     {
-        money += 1;  
-        text.text = money.ToString();
+        attention += 1;  
+        text.text = attention.ToString();
     }
 }
