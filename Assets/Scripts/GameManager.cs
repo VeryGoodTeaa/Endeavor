@@ -41,6 +41,8 @@ public class GameManager : MonoBehaviour
     {
         // random -> spawn donuts -> inc money
         // if upgrade mode -> stop
+
+
     }
 
     public void UpgradeDesk()
