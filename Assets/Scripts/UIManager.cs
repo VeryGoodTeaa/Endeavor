@@ -6,8 +6,6 @@ public class UIManager : MonoBehaviour
     [Header("������")]
     public GameObject mainMenuPanel;
     public GameObject gamePanel;
-    public GameObject settingsPanel;
-    public GameObject savesPanel;
     public GameObject deskUpgradesPanel;
     public GameObject roomUpgradesPanel;
 
@@ -58,8 +56,6 @@ public class UIManager : MonoBehaviour
     {
         mainMenuPanel.SetActive(false);
         gamePanel.SetActive(false);
-        settingsPanel.SetActive(false);
-        savesPanel.SetActive(false);
         deskUpgradesPanel.SetActive(false);
         roomUpgradesPanel.SetActive(false);
     }
