@@ -163,10 +163,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41b86dcf05ed33245ac95d2c7225afd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
-  MainMenuPanel: {fileID: 0}
-  GamePanel: {fileID: 0}
-  RoomUpgradesPanel: {fileID: 0}
-  UpgradeTypeDropdown: {fileID: 0}
+  attentionText: {fileID: 0}
+  moneyText: {fileID: 0}
+  modeDropdown: {fileID: 0}
+  tooltipPanel: {fileID: 0}
+  tooltipText: {fileID: 0}
+  donationListContainer: {fileID: 0}
+  donationItemPrefab: {fileID: 0}
+  clickPopupPrefab: {fileID: 0}
+  worldCanvas: {fileID: 0}
 --- !u!1 &237648543
 GameObject:
   m_ObjectHideFlags: 0
@@ -211,11 +216,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a018e332f4446324b8deb410a0026db3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClickerScript
-  AttentionCountText: {fileID: 0}
-  MoneyCountText: {fileID: 0}
-  DonutPrefab: {fileID: 7853950986822680105, guid: c91ba954afaa58a40ad4549e2c5746ae, type: 3}
-  PopupPrefab: {fileID: 6374107640006273659, guid: d6ba5079a8e9d0448b8d89ceea839234, type: 3}
-  Parent: {fileID: 0}
+  attention: 0
+  money: 0
+  clickPower: 1
+  passiveAttentionRate: -0.5
+  baseDonationChance: 0.05
 --- !u!1 &519832497
 GameObject:
   m_ObjectHideFlags: 0
@@ -308,7 +313,7 @@ GameObject:
   - component: {fileID: 756932812}
   - component: {fileID: 756932811}
   m_Layer: 5
-  m_Name: UICanvas
+  m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -396,37 +401,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &1400366314
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1400366315}
-  m_Layer: 0
-  m_Name: SaveManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1400366315
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1400366314}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1461447540}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1461447539
 GameObject:
   m_ObjectHideFlags: 0
@@ -457,8 +431,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 126455451}
-  - {fileID: 1400366315}
   - {fileID: 237648544}
+  - {fileID: 2088079993}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1532382510
@@ -598,6 +572,53 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2088079992
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2088079993}
+  - component: {fileID: 2088079994}
+  m_Layer: 0
+  m_Name: InteractionManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2088079993
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088079992}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1461447540}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2088079994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088079992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f947f8791cf40be49a369a509bc388e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::InteractionManager
+  currentMode: 0
+  mainScreenRoot: {fileID: 0}
+  extraScreenRoot: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
