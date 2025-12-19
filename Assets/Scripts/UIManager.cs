@@ -1,24 +1,34 @@
-using UnityEngine;
 using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    public GameObject mainMenuPanel;
-    public GameObject gamePanel;
-    public GameObject deskUpgradesPanel;
-    public GameObject roomUpgradesPanel;
+    public static UIManager Instance { get; private set; }
+
+    public GameObject MainMenuPanel;
+    public GameObject GamePanel;
+    public GameObject RoomUpgradesPanel;
+    public TMP_Dropdown UpgradeTypeDropdown;
 
     private GameObject currentPanel;
     private Stack<GameObject> openedPanels = new();
 
-    void Start()
+    private void Start()
     {
         CloseAllPanels();
-        currentPanel = mainMenuPanel;
+        currentPanel = MainMenuPanel;
         currentPanel.SetActive(true);
+        UpgradeTypeDropdown.onValueChanged.AddListener(OnDropdownChanged);
     }
 
-    void Update()
+    private void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+    }
+
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -41,6 +51,9 @@ public class UIManager : MonoBehaviour
 
     public void GoBack()
     {
+        UpgradeTypeDropdown.value = 0;
+        GameManager.Instance.IsUpgradeMode = false;
+
         if (openedPanels.Count <= 0)
             return;
 
@@ -53,9 +66,23 @@ public class UIManager : MonoBehaviour
 
     private void CloseAllPanels()
     {
-        mainMenuPanel.SetActive(false);
-        gamePanel.SetActive(false);
-        deskUpgradesPanel.SetActive(false);
-        roomUpgradesPanel.SetActive(false);
+        MainMenuPanel.SetActive(false);
+        GamePanel.SetActive(false);
+        RoomUpgradesPanel.SetActive(false);
+    }
+
+    public void OnDropdownChanged(int index)
+    {
+        switch (index)
+        {
+            case 0:
+                GameManager.Instance.UpgradeDesk();
+                break;
+            case 1:
+                GameManager.Instance.UpgradeRoom();
+                break;
+            default:
+                break;
+        }
     }
 }
