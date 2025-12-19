@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 public class UIManager : MonoBehaviour
 {
-    [Header("������")]
     public GameObject mainMenuPanel;
     public GameObject gamePanel;
     public GameObject deskUpgradesPanel;

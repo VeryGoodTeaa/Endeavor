@@ -222,6 +222,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7094932481100434851}
   - component: {fileID: 2261121802730729343}
+  - component: {fileID: -469861692214123954}
   m_Layer: 5
   m_Name: Popup
   m_TagString: Untagged
@@ -247,7 +248,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -70.25605, y: 37.53263}
+  m_AnchoredPosition: {x: -70.82, y: 37.03}
   m_SizeDelta: {x: 32, y: 9}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!225 &2261121802730729343
@@ -262,3 +263,19 @@ CanvasGroup:
   m_Interactable: 0
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &-469861692214123954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6374107640006273659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 443a041ae62303c4fa430df3e733294a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Popup
+  amountText: {fileID: 683428432489078344}
+  canvasGroup: {fileID: 2261121802730729343}
+  moveSpeed: 50
+  lifeTime: 1
