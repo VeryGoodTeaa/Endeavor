@@ -16,18 +16,21 @@ public class InteractionManager : MonoBehaviour
     public GameObject mainScreenRoot;
     public GameObject extraScreenRoot;
 
-    private UpgradableObject hoveredObject;
+    public Camera gameCamera;
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            SetMode(0);
-            UIManager.Instance.ResetDropdown();
-        }
+    private UpgradableObject hoveredUpgradeItem;
+    private MainClickObject hoveredClickTarget;
 
-        HandleMouseInteraction();
-    }
+    //void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Escape))
+    //    {
+    //        SetMode(0);
+    //        UIManager.Instance.ResetDropdown();
+    //    }
+
+    //    HandleMouseInteraction();
+    //}
 
     public void SetMode(int modeIndex)
     {
@@ -47,59 +50,84 @@ public class InteractionManager : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SetMode(0);
+            UIManager.Instance.ResetDropdown();
+        }
+
+        HandleMouseInteraction();
+    }
+
     void HandleMouseInteraction()
     {
         if (EventSystem.current.IsPointerOverGameObject()) return;
 
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (gameCamera == null) gameCamera = Camera.main;
+
+        Vector2 mousePos = gameCamera.ScreenToWorldPoint(Input.mousePosition);
         RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
 
-        if (currentMode != GameMode.Gameplay)
+        if (currentMode == GameMode.Gameplay)
+        {
+            ClearUpgradeHover();
+
+            if (hit.collider != null && hit.collider.TryGetComponent(out MainClickObject target))
+            {
+                hoveredClickTarget = target;
+
+                if (Input.GetMouseButtonDown(0))
+                {
+                    GameManager.Instance.AddAttention(GameManager.Instance.clickPower);
+                    target.PlayClickAnimation();
+                    UIManager.Instance.SpawnClickPopup(mousePos, GameManager.Instance.clickPower);
+                }
+            }
+            else
+            {
+                hoveredClickTarget = null;
+            }
+        }
+
+        else
         {
             if (hit.collider != null && hit.collider.TryGetComponent(out UpgradableObject obj))
             {
-                if (hoveredObject != obj)
+                if (hoveredUpgradeItem != obj)
                 {
-                    if (hoveredObject != null) hoveredObject.SetHighlight(false);
-                    hoveredObject = obj;
-                    hoveredObject.SetHighlight(true);
+                    ClearUpgradeHover();
+                    hoveredUpgradeItem = obj;
+                    hoveredUpgradeItem.SetHighlight(true);
                 }
 
-                // Показать подсказку через UIManager
                 UpgradeLevelData nextLvl = obj.GetNextLevelData();
                 if (nextLvl != null)
                     UIManager.Instance.ShowTooltip(obj.objectName, nextLvl.cost, nextLvl.clickPowerBonus, Input.mousePosition);
                 else
                     UIManager.Instance.ShowTooltip(obj.objectName, "MAX LVL", Input.mousePosition);
-            }
-            else
-            {
-                if (hoveredObject != null)
+
+                if (Input.GetMouseButtonDown(0))
                 {
-                    hoveredObject.SetHighlight(false);
-                    hoveredObject = null;
-                    UIManager.Instance.HideTooltip();
+                    obj.Upgrade();
                 }
             }
-        }
-        else
-        {
-            if (hoveredObject != null) { hoveredObject.SetHighlight(false); hoveredObject = null; }
-            UIManager.Instance.HideTooltip();
-        }
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (currentMode == GameMode.Gameplay)
-            {
-                GameManager.Instance.AddAttention(GameManager.Instance.clickPower);
-                UIManager.Instance.SpawnClickPopup(mousePos, GameManager.Instance.clickPower);
-            }
             else
             {
-                if (hoveredObject != null)
-                    hoveredObject.Upgrade();
+                // Мышь ушла с предмета улучшения
+                ClearUpgradeHover();
             }
         }
+    }
+
+    private void ClearUpgradeHover()
+    {
+        if (hoveredUpgradeItem != null)
+        {
+            hoveredUpgradeItem.SetHighlight(false);
+            hoveredUpgradeItem = null;
+        }
+        UIManager.Instance.HideTooltip();
     }
 }
