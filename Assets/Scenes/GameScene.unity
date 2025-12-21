@@ -1181,8 +1181,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -146.7, y: 73}
-  m_SizeDelta: {x: 118, y: 233.03}
+  m_AnchoredPosition: {x: -282.5, y: 73}
+  m_SizeDelta: {x: 385, y: 233.03}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &628938505
 MonoBehaviour:
@@ -2100,7 +2100,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
-  m_Spacing: 0
+  m_Spacing: 7
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
@@ -2602,7 +2602,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1631799746}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Tooltip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2640,7 +2640,7 @@ GameObject:
   - component: {fileID: 1680852133}
   - component: {fileID: 1680852134}
   - component: {fileID: 1680852135}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: TooltipText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
