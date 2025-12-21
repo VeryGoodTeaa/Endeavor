@@ -1,4 +1,4 @@
-namespace YG.EditorScr
+﻿namespace YG.EditorScr
 {
     using System;
     using System.Collections.Generic;

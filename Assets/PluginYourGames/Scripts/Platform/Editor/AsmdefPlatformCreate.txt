@@ -1,4 +1,4 @@
-{
+﻿{
     "name": "___PLATFORM_NAME___",
     "rootNamespace": "",
     "references": [],

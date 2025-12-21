@@ -1,4 +1,4 @@
-namespace YG.Insides
+﻿namespace YG.Insides
 {
     public partial class OptionalPlatform
     {

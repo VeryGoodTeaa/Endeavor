@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+п»їusing System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -71,7 +71,7 @@ public class UIManager : MonoBehaviour
     {
         tooltipObj.SetActive(true);
         tooltipObj.transform.position = Input.mousePosition + new Vector3(100, 50, 0);
-        tooltipText.text = $"Цена: {cost}$\n+Пассивный бонус: {passive}\n+Сила клика: {click}";
+        tooltipText.text = $"Р¦РµРЅР°: {cost}$\n+РџР°СЃСЃРёРІРЅС‹Р№ Р±РѕРЅСѓСЃ: {passive}\n+РЎРёР»Р° РєР»РёРєР°: {click}";
     }
 
     public void ShowMaxLevelTooltip()

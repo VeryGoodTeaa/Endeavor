@@ -1,4 +1,4 @@
-namespace YG.Insides
+﻿namespace YG.Insides
 {
 #if PLATFORM_WEBGL
     using System.Runtime.InteropServices;

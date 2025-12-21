@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewUpgrade", menuName = "Clicker/UpgradeItem")]
 public class UpgradeConfig : ScriptableObject
