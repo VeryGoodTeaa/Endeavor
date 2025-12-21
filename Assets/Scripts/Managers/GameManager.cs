@@ -28,6 +28,10 @@ public class GameManager : MonoBehaviour
     [Header("Game States")]
     public GameState currentState = GameState.Play;
 
+    [Header("Save Settings")]
+    public bool autoSaveEnabled = true;
+    public float autoSaveInterval = 30f;
+
     public enum GameState { Play, UpgradeMode }
 
     private void Awake()
@@ -38,7 +42,12 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        LoadGameState();
+
         StartCoroutine(PassiveLogicRoutine());
+
+        if (autoSaveEnabled)
+            StartCoroutine(AutoSaveRoutine());
     }
 
     private void Update()
@@ -48,7 +57,90 @@ public class GameManager : MonoBehaviour
             if (currentState == GameState.UpgradeMode)
                 UIManager.Instance.SetModeNormal();
             else
-                SceneManager.LoadScene("MainMenu");
+                SceneManager.LoadScene("MainMenuScene");
+        }
+    }
+
+    IEnumerator AutoSaveRoutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(autoSaveInterval);
+            SaveGame();
+        }
+    }
+
+
+    public void SaveGame()
+    {
+        SaveData data = new SaveData();
+        data.money = money;
+        data.attention = attention;
+        data.currentPity = currentClickPity;
+
+        ClickableObject[] items = FindObjectsOfType<ClickableObject>(true);
+        foreach (var item in items)
+        {
+            if (item.config != null)
+            {
+                ItemSaveData itemData = new ItemSaveData
+                {
+                    id = item.config.id,
+                    levelIndex = item.currentLevelIndex
+                };
+                data.items.Add(itemData);
+            }
+        }
+
+        SaveSystem.Save(data);
+    }
+
+    public void LoadGameState()
+    {
+        if (!SaveSystem.HasSave()) return;
+
+        SaveData data = SaveSystem.Load();
+
+        money = data.money;
+        attention = data.attention;
+        currentClickPity = data.currentPity;
+
+        currentClickPower = 1f;
+        currentPassiveAttention = 0f;
+        eventChanceMultiplier = 1f;
+
+        ClickableObject[] sceneItems = FindObjectsOfType<ClickableObject>(true);
+
+        foreach (var savedItem in data.items)
+        {
+            foreach (var sceneItem in sceneItems)
+            {
+                if (sceneItem.config.id == savedItem.id)
+                {
+                    sceneItem.ForceSetLevel(savedItem.levelIndex);
+                    RecalculateItemBonuses(sceneItem, savedItem.levelIndex);
+                    break;
+                }
+            }
+        }
+
+        UIManager.Instance.UpdateCurrencyUI();
+    }
+
+    void RecalculateItemBonuses(ClickableObject item, int level)
+    {
+        for (int i = 0; i < level; i++)
+        {
+            var lvlData = item.config.levels[i];
+
+            if (i < item.config.levels.Length)
+            {
+                var l = item.config.levels[i];
+
+                currentPassiveAttention += l.passiveAttentionBonus;
+                eventChanceMultiplier += l.eventChanceBonus;
+                // currentClickPower += l.clickPowerBonus;
+            }
         }
     }
 
@@ -108,4 +200,6 @@ public class GameManager : MonoBehaviour
         money -= amount;
         UIManager.Instance.UpdateCurrencyUI();
     }
+
+    private void OnApplicationQuit() => SaveGame();
 }

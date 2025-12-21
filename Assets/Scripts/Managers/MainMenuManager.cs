@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-public class MainMenuController : MonoBehaviour
+public class MainMenuManager : MonoBehaviour
 {
     [Header("Buttons")]
     public Button primaryButton;
