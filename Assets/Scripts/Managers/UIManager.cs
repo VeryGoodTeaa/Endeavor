@@ -63,8 +63,8 @@ public class UIManager : MonoBehaviour
 
     public void UpdateCurrencyUI()
     {
-        attentionText.text = $"Attention: {GameManager.Instance.attention:F0}";
-        moneyText.text = $"$: {GameManager.Instance.money:F0}";
+        attentionText.text = $"{GameManager.Instance.attention:F0}";
+        moneyText.text = $"{GameManager.Instance.money:F0}";
     }
 
     public void ShowTooltip(float cost, float passive, float click)
@@ -94,7 +94,7 @@ public class UIManager : MonoBehaviour
     public void AddDonationLog(float amount)
     {
         GameObject item = Instantiate(donationItemPrefab, donationListContainer);
-        item.GetComponentInChildren<TMP_Text>().text = $"+{amount}$ Donated!";
+        item.GetComponentInChildren<TMP_Text>().text = $"+{amount}$";
 
         donationItems.Enqueue(item);
 
