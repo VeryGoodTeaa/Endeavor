@@ -88,7 +88,7 @@ public class MainMenuManager : MonoBehaviour
         LoadGameScene();
     }
 
-    void LoadGameScene() => SceneManager.LoadScene("Game");
+    void LoadGameScene() => SceneManager.LoadScene("GameScene");
 
     void OnExitClick() => Application.Quit();
 }
