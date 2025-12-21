@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 [RequireComponent(typeof(Image))]
 [RequireComponent(typeof(Outline))]
-public class ClickableItem : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+public class ClickableObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public UpgradeConfig config;
     public int currentLevelIndex = 0;
@@ -65,7 +65,6 @@ public class ClickableItem : MonoBehaviour, IPointerClickHandler, IPointerEnterH
         ShowTooltip();
     }
 
-    // Наведение курсора
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (GameManager.Instance.currentState == GameManager.GameState.UpgradeMode)
@@ -92,5 +91,11 @@ public class ClickableItem : MonoBehaviour, IPointerClickHandler, IPointerEnterH
         {
             UIManager.Instance.ShowMaxLevelTooltip();
         }
+    }
+
+    public void ForceSetLevel(int level)
+    {
+        currentLevelIndex = level;
+        UpdateVisuals();
     }
 }
