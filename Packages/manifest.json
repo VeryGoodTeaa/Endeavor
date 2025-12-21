@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.playgama.bridge": "https://github.com/playgama/bridge-unity.git",
     "com.unity.2d.animation": "12.0.2",
     "com.unity.2d.aseprite": "2.0.2",
     "com.unity.2d.enhancers": "1.0.0",
