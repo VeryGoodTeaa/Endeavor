@@ -1,10 +1,5 @@
 {
     "stringPrefs": [],
-    "intPrefs": [
-        {
-            "key": "FirstStartup_YG2",
-            "value": 2
-        }
-    ],
+    "intPrefs": [],
     "floatPrefs": []
 }

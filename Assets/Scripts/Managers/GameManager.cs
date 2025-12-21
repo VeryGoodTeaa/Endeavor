@@ -1,18 +1,38 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
-    [Header("Resources")]
+    [Header("Currencies")]
     public float attention;
     public float money;
 
     [Header("Stats")]
-    public float clickPower = 1f;
-    public float passiveAttentionRate = -0.5f; // ¬нимание падает по умолчанию
-    public float baseDonationChance = 0.05f; // 5% шанс в секунду
+    public float currentClickPower = 1f;
+    public float currentPassiveAttention = 0f;
+    public float eventChanceMultiplier = 1f;
+
+    [Header("Donation Settings")]
+    public float donationCheckInterval = 1f;
+    public float baseDonationChance = 0.05f;
+
+    [Tooltip("—колько кликов нужно сделать дл€ гарантированного доната")]
+    public int clicksForGuaranteedDonation = 50;
+
+    [Tooltip("“екущий счетчик кликов (только дл€ чтени€)")]
+    public int currentClickPity = 0;
+
+    [Header("Game States")]
+    public GameState currentState = GameState.Play;
+
+    [Header("Save Settings")]
+    public bool autoSaveEnabled = true;
+    public float autoSaveInterval = 30f;
+
+    public enum GameState { Play, UpgradeMode }
 
     private void Awake()
     {
@@ -22,57 +42,164 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(PassiveLoop());
+        LoadGameState();
+
+        StartCoroutine(PassiveLogicRoutine());
+
+        if (autoSaveEnabled)
+            StartCoroutine(AutoSaveRoutine());
     }
 
     private void Update()
     {
-        attention += passiveAttentionRate * Time.deltaTime;
-
-        if (attention < 0) attention = 0;
-
-        UIManager.Instance.UpdateResourceUI(attention, money);
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (currentState == GameState.UpgradeMode)
+                UIManager.Instance.SetModeNormal();
+            else
+                SceneManager.LoadScene("MainMenuScene");
+        }
     }
 
-    public void AddAttention(float amount)
-    {
-        attention += amount;
-    }
-
-    IEnumerator PassiveLoop()
+    IEnumerator AutoSaveRoutine()
     {
         while (true)
         {
-            yield return new WaitForSeconds(1.0f);
-
-            float currentChance = baseDonationChance + (attention * 0.001f);
-
-            if (Random.value < currentChance)
-                GenerateDonation();
+            yield return new WaitForSeconds(autoSaveInterval);
+            SaveGame();
         }
     }
 
-    void GenerateDonation()
-    {
-        int donationAmount = Mathf.RoundToInt(Random.Range(10, 50) * (1 + attention * 0.01f));
-        money += donationAmount;
-        UIManager.Instance.AddDonationLog(donationAmount);
-    }
 
-    public bool TrySpendMoney(float amount)
+    public void SaveGame()
     {
-        if (money >= amount)
+        SaveData data = new SaveData();
+        data.money = money;
+        data.attention = attention;
+        data.currentPity = currentClickPity;
+
+        ClickableObject[] items = FindObjectsOfType<ClickableObject>(true);
+        foreach (var item in items)
         {
-            money -= amount;
-            return true;
+            if (item.config != null)
+            {
+                ItemSaveData itemData = new ItemSaveData
+                {
+                    id = item.config.id,
+                    levelIndex = item.currentLevelIndex
+                };
+                data.items.Add(itemData);
+            }
         }
-        return false;
+
+        SaveSystem.Save(data);
     }
 
-    public void ApplyUpgradeBonuses(UpgradeLevelData data)
+    public void LoadGameState()
     {
-        clickPower += data.clickPowerBonus;
-        passiveAttentionRate += data.passiveAttentionBonus;
-        // events logic
+        if (!SaveSystem.HasSave()) return;
+
+        SaveData data = SaveSystem.Load();
+
+        money = data.money;
+        attention = data.attention;
+        currentClickPity = data.currentPity;
+
+        currentClickPower = 1f;
+        currentPassiveAttention = 0f;
+        eventChanceMultiplier = 1f;
+
+        ClickableObject[] sceneItems = FindObjectsOfType<ClickableObject>(true);
+
+        foreach (var savedItem in data.items)
+        {
+            foreach (var sceneItem in sceneItems)
+            {
+                if (sceneItem.config.id == savedItem.id)
+                {
+                    sceneItem.ForceSetLevel(savedItem.levelIndex);
+                    RecalculateItemBonuses(sceneItem, savedItem.levelIndex);
+                    break;
+                }
+            }
+        }
+
+        UIManager.Instance.UpdateCurrencyUI();
     }
+
+    void RecalculateItemBonuses(ClickableObject item, int level)
+    {
+        for (int i = 0; i < level; i++)
+        {
+            var lvlData = item.config.levels[i];
+
+            if (i < item.config.levels.Length)
+            {
+                var l = item.config.levels[i];
+
+                currentPassiveAttention += l.passiveAttentionBonus;
+                eventChanceMultiplier += l.eventChanceBonus;
+                // currentClickPower += l.clickPowerBonus;
+            }
+        }
+    }
+
+    public void HandleClick(float itemClickBonus, Vector3 clickPos)
+    {
+        float amount = currentClickPower + itemClickBonus;
+
+        attention += amount;
+        UIManager.Instance.ShowClickPopup(amount, clickPos);
+        UIManager.Instance.UpdateCurrencyUI();
+
+        currentClickPity++;
+
+        if (currentClickPity >= clicksForGuaranteedDonation)
+        {
+            ReceiveDonation();
+            currentClickPity = 0;
+        }
+    }
+
+    IEnumerator PassiveLogicRoutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+
+            attention += currentPassiveAttention;
+            if (attention < 0) attention = 0;
+
+            CheckPassiveDonationChance();
+
+            UIManager.Instance.UpdateCurrencyUI();
+        }
+    }
+
+    void CheckPassiveDonationChance()
+    {
+        float chance = baseDonationChance + (attention / 1000f * 0.01f);
+
+        chance = Mathf.Clamp(chance, 0f, 0.3f);
+
+        if (Random.value < chance)
+            ReceiveDonation();
+    }
+
+    void ReceiveDonation()
+    {
+        float donationAmount = Random.Range(10, 100);
+        money += donationAmount;
+
+        UIManager.Instance.AddDonationLog(donationAmount);
+        UIManager.Instance.UpdateCurrencyUI();
+    }
+
+    public void SpendMoney(float amount)
+    {
+        money -= amount;
+        UIManager.Instance.UpdateCurrencyUI();
+    }
+
+    private void OnApplicationQuit() => SaveGame();
 }

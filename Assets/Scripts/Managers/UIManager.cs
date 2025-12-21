@@ -1,80 +1,116 @@
-using UnityEngine;
+using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
 
-    [Header("UI References")]
+    [Header("Roots")]
+    public GameObject mainScreenRoot;
+    public GameObject extraScreenRoot;
+
+    [Header("HUD")]
     public TMP_Text attentionText;
     public TMP_Text moneyText;
     public TMP_Dropdown modeDropdown;
-    public GameObject tooltipPanel;
+    public GameObject tooltipObj;
     public TMP_Text tooltipText;
 
-    [Header("Donation List")]
+    [Header("Donation Log")]
     public Transform donationListContainer;
     public GameObject donationItemPrefab;
+    private Queue<GameObject> donationItems = new Queue<GameObject>();
 
-    [Header("Click Popup")]
-    public GameObject clickPopupPrefab;
-    public Canvas worldCanvas;
+    [Header("Popups")]
+    public GameObject popupPrefab;
+    public Transform popupContainer;
 
-    private void Awake() => Instance = this;
-
-    public void UpdateResourceUI(float attention, float money)
+    private void Awake()
     {
-        attentionText.text = $"{attention:F0}";
-        moneyText.text = $"${money:F0}";
+        Instance = this;
+        modeDropdown.onValueChanged.AddListener(OnModeChanged);
     }
 
-    public void OnDropdownChanged(int index)
+    public void OnModeChanged(int index)
     {
-        FindObjectOfType<InteractionManager>().SetMode(index);
+        switch (index)
+        {
+            case 0:
+                SetModeNormal();
+                break;
+            case 1:
+                GameManager.Instance.currentState = GameManager.GameState.UpgradeMode;
+                mainScreenRoot.SetActive(true);
+                extraScreenRoot.SetActive(false);
+                break;
+            case 2:
+                GameManager.Instance.currentState = GameManager.GameState.UpgradeMode;
+                mainScreenRoot.SetActive(false);
+                extraScreenRoot.SetActive(true);
+                break;
+        }
     }
 
-    public void ResetDropdown()
+    public void SetModeNormal()
     {
+        GameManager.Instance.currentState = GameManager.GameState.Play;
         modeDropdown.value = 0;
+        mainScreenRoot.SetActive(true);
+        extraScreenRoot.SetActive(false);
+        HideTooltip();
     }
 
-    public void ShowTooltip(string name, float cost, float bonus, Vector2 screenPos)
+    public void UpdateCurrencyUI()
     {
-        tooltipPanel.SetActive(true);
-        tooltipPanel.transform.position = screenPos + new Vector2(20, 20);
-        tooltipText.text = $"{name}\nCost: {cost}$\nBonus: +{bonus}";
+        attentionText.text = $"{GameManager.Instance.attention:F0}";
+        moneyText.text = $"{GameManager.Instance.money:F0}";
     }
 
-    public void ShowTooltip(string name, string customMsg, Vector2 screenPos)
+    public void ShowTooltip(float cost, float passive, float click)
     {
-        tooltipPanel.SetActive(true);
-        tooltipPanel.transform.position = screenPos;
-        tooltipText.text = $"{name}\n{customMsg}";
+        tooltipObj.SetActive(true);
+        tooltipObj.transform.position = Input.mousePosition + new Vector3(100, 50, 0);
+        tooltipText.text = $"Цена: {cost}$\n+Пассивный бонус: {passive}\n+Сила клика: {click}";
     }
 
-    public void HideTooltip()
+    public void ShowMaxLevelTooltip()
     {
-        tooltipPanel.SetActive(false);
+        tooltipObj.SetActive(true);
+        tooltipObj.transform.position = Input.mousePosition + new Vector3(20, 20, 0);
+        tooltipText.text = "MAX LEVEL";
     }
 
-    public void AddDonationLog(int amount)
+    public void HideTooltip() => tooltipObj.SetActive(false);
+
+    public void ShowClickPopup(float amount, Vector3 pos)
+    {
+        Vector3 randomOffset = new Vector3(Random.Range(-50, 50), Random.Range(-50, 50), 0);
+        GameObject popup = Instantiate(popupPrefab, pos + randomOffset, Quaternion.identity, popupContainer);
+        popup.GetComponentInChildren<TMP_Text>().text = $"+{amount:F0}";
+        Destroy(popup, 0.8f); // ToDo - objects pool
+    }
+
+    public void AddDonationLog(float amount)
     {
         GameObject item = Instantiate(donationItemPrefab, donationListContainer);
         item.GetComponentInChildren<TMP_Text>().text = $"+{amount}$";
 
-        if (donationListContainer.childCount > 4)
-            Destroy(donationListContainer.GetChild(0).gameObject);
+        donationItems.Enqueue(item);
 
-        Destroy(item, 5.0f);
+        if (donationItems.Count > 4)
+        {
+            GameObject oldItem = donationItems.Dequeue();
+            Destroy(oldItem);
+        }
+
+        StartCoroutine(RemoveDonationOverTime(item));
     }
 
-    public void SpawnClickPopup(Vector2 worldPos, float amount)
+    System.Collections.IEnumerator RemoveDonationOverTime(GameObject item)
     {
-        Vector2 randomOffset = new Vector2(Random.Range(-0.5f, 0.5f), Random.Range(-0.5f, 0.5f));
-        GameObject popup = Instantiate(clickPopupPrefab, worldPos + randomOffset, Quaternion.identity);
-
-        popup.GetComponentInChildren<TMP_Text>().text = $"+{amount}";
-
-        Destroy(popup, 1.0f);
+        yield return new WaitForSeconds(5f);
+        if (item != null)
+            Destroy(item);
     }
 }
