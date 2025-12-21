@@ -18,8 +18,12 @@ public class GameManager : MonoBehaviour
     [Header("Donation Settings")]
     public float donationCheckInterval = 1f;
     public float baseDonationChance = 0.05f;
-    public float pityThreshold = 100f;
-    private float currentPity = 0f;
+
+    [Tooltip("Сколько кликов нужно сделать для гарантированного доната")]
+    public int clicksForGuaranteedDonation = 50;
+
+    [Tooltip("Текущий счетчик кликов (только для чтения)")]
+    public int currentClickPity = 0;
 
     [Header("Game States")]
     public GameState currentState = GameState.Play;
@@ -55,6 +59,14 @@ public class GameManager : MonoBehaviour
         attention += amount;
         UIManager.Instance.ShowClickPopup(amount, clickPos);
         UIManager.Instance.UpdateCurrencyUI();
+
+        currentClickPity++;
+
+        if (currentClickPity >= clicksForGuaranteedDonation)
+        {
+            ReceiveDonation();
+            currentClickPity = 0;
+        }
     }
 
     IEnumerator PassiveLogicRoutine()
@@ -66,24 +78,24 @@ public class GameManager : MonoBehaviour
             attention += currentPassiveAttention;
             if (attention < 0) attention = 0;
 
-            CheckForDonation();
+            CheckPassiveDonationChance();
+
             UIManager.Instance.UpdateCurrencyUI();
         }
     }
 
-    void CheckForDonation()
+    void CheckPassiveDonationChance()
     {
-        float chance = baseDonationChance + (attention / 10000f);
+        float chance = baseDonationChance + (attention / 1000f * 0.01f);
 
-        currentPity += 1f + (attention / 500f);
+        chance = Mathf.Clamp(chance, 0f, 0.3f);
 
-        if (Random.value < chance || currentPity >= pityThreshold)
+        if (Random.value < chance)
             ReceiveDonation();
     }
 
     void ReceiveDonation()
     {
-        currentPity = 0;
         float donationAmount = Random.Range(10, 100);
         money += donationAmount;
 

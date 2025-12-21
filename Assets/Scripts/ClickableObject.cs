@@ -35,7 +35,7 @@ public class ClickableItem : MonoBehaviour, IPointerClickHandler, IPointerEnterH
             if (currentLevelIndex > 0)
                 bonus = config.levels[currentLevelIndex - 1].clickPowerBonus;
 
-            GameManager.Instance.HandleClick(bonus, transform.position);
+            GameManager.Instance.HandleClick(bonus, eventData.position);
         }
         else if (GameManager.Instance.currentState == GameManager.GameState.UpgradeMode)
             TryUpgrade();
