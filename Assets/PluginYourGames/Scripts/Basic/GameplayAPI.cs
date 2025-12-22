@@ -1,4 +1,4 @@
-﻿namespace YG
+namespace YG
 {
     public partial interface IPlatformsYG2
     {

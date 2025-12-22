@@ -1,4 +1,4 @@
-ï»¿using System;
+using System;
 using System.Collections.Generic;
 
 [Serializable]
@@ -13,6 +13,6 @@ public class SaveData
 [Serializable]
 public struct ItemSaveData
 {
-    public string id;      // ID Ð¸Ð· UpgradeConfig
+    public string id;      // ID èç UpgradeConfig
     public int levelIndex;
 }

@@ -1,4 +1,4 @@
-﻿using YG.Insides;
+using YG.Insides;
 
 namespace YG
 {

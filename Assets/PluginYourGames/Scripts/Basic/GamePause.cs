@@ -1,4 +1,4 @@
-﻿namespace YG
+namespace YG
 {
     using System;
     using UnityEngine;

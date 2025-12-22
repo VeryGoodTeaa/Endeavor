@@ -1,4 +1,4 @@
-п»їusing UnityEngine;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
@@ -19,10 +19,10 @@ public class GameManager : MonoBehaviour
     public float donationCheckInterval = 1f;
     public float baseDonationChance = 0.05f;
 
-    [Tooltip("РЎРєРѕР»СЊРєРѕ РєР»РёРєРѕРІ РЅСѓР¶РЅРѕ СЃРґРµР»Р°С‚СЊ РґР»СЏ РіР°СЂР°РЅС‚РёСЂРѕРІР°РЅРЅРѕРіРѕ РґРѕРЅР°С‚Р°")]
+    [Tooltip("Сколько кликов нужно сделать для гарантированного доната")]
     public int clicksForGuaranteedDonation = 50;
 
-    [Tooltip("РўРµРєСѓС‰РёР№ СЃС‡РµС‚С‡РёРє РєР»РёРєРѕРІ (С‚РѕР»СЊРєРѕ РґР»СЏ С‡С‚РµРЅРёСЏ)")]
+    [Tooltip("Текущий счетчик кликов (только для чтения)")]
     public int currentClickPity = 0;
 
     [Header("Game States")]

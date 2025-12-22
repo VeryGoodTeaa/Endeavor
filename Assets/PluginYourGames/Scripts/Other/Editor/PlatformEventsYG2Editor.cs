@@ -1,4 +1,4 @@
-п»їusing System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.IO;
@@ -23,7 +23,7 @@ namespace YG.EditorScr
             unityEvents = serializedObject.FindProperty("platformAction");
             executeMode = serializedObject.FindProperty("executeMode");
 #if RU_YG2
-            m_AddButonContent = EditorGUIUtility.TrTextContent("Р”РѕР±Р°РІРёС‚СЊ РїР»Р°С‚С„РѕСЂРјСѓ");
+            m_AddButonContent = EditorGUIUtility.TrTextContent("Добавить платформу");
 #else
             m_AddButonContent = EditorGUIUtility.TrTextContent("Add platform");
 #endif
@@ -81,26 +81,26 @@ namespace YG.EditorScr
 
             string descript;
 #if RU_YG2
-            descript = "РЎРїРёСЃРѕРє РІС‹Р±СЂР°РЅРЅС‹С… РїР»Р°С‚С„РѕСЂРј";
+            descript = "Список выбранных платформ";
 #else
             descript = "List of selected platforms";
 #endif
             EditorGUILayout.PropertyField(platforms, new GUIContent(descript), true);
             EditorGUILayout.Space(10);
 #if RU_YG2
-            descript = "РЎРїРѕСЃРѕР± РІС‹РїРѕР»РЅРµРЅРёСЏ";
+            descript = "Способ выполнения";
 #else
             descript = "Execution mede";
 #endif
             EditorGUILayout.PropertyField(executeMode, new GUIContent(descript), true);
 #if RU_YG2
-            descript = "РўСЂРёРіРіРµСЂ (РєРѕРіРґР° РІС‹РїРѕР»РЅРёС‚СЊ)";
+            descript = "Триггер (когда выполнить)";
 #else
             descript = "Trigger (when to Execute)";
 #endif
             EditorGUILayout.PropertyField(whenToEvent, new GUIContent(descript), true);
 #if RU_YG2
-            descript = "Р’С‹РїРѕР»РЅРёС‚СЊ:";
+            descript = "Выполнить:";
 #else
             descript = "To perform:";
 #endif
@@ -116,7 +116,7 @@ namespace YG.EditorScr
                 if (targetObject.name == ((PlatformEventsYG2)target).gameObject.name && methodName == "DeactivateGameObject")
                 {
 #if RU_YG2
-                    descript = "РџРѕ СѓРјРѕР»С‡Р°РЅРёСЋ РїСЂРёРІСЏР·Р°РЅ РјРµС‚РѕРґ РґРµР°РєС‚РёРІР°С†РёРё РѕР±СЉРµРєС‚Р°";
+                    descript = "По умолчанию привязан метод деактивации объекта";
 #else
                     descript = "By default, the deactivation method of object is linked";
 #endif

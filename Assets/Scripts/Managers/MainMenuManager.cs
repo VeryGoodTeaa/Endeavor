@@ -1,4 +1,4 @@
-п»їusing UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
@@ -41,15 +41,15 @@ public class MainMenuManager : MonoBehaviour
     {
         if (hasSaveData)
         {
-            primaryBtnText.text = "РџСЂРѕРґРѕР»Р¶РёС‚СЊ";
+            primaryBtnText.text = "Продолжить";
             SetButtonSize(primaryButton, true);
 
             secondaryButton.gameObject.SetActive(true);
-            secondaryButton.GetComponentInChildren<TMP_Text>().text = "РќР°С‡Р°С‚СЊ РЅРѕРІСѓСЋ РёРіСЂСѓ";
+            secondaryButton.GetComponentInChildren<TMP_Text>().text = "Начать новую игру";
         }
         else
         {
-            primaryBtnText.text = "РќР°С‡Р°С‚СЊ РЅРѕРІСѓСЋ РёРіСЂСѓ";
+            primaryBtnText.text = "Начать новую игру";
             SetButtonSize(primaryButton, true);
             secondaryButton.gameObject.SetActive(false);
         }

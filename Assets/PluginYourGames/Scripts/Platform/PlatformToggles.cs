@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using YG.Insides;
 
 namespace YG

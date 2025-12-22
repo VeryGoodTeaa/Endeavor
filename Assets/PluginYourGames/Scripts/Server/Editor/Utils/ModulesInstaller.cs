@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -48,7 +48,7 @@ namespace YG.EditorScr
                 string dialogText = Langs.dependenciesDialog + "\n";
 
                 foreach (Module dependency in dependencies)
-                    dialogText += "\n• " + dependency.nameModule;
+                    dialogText += "\n� " + dependency.nameModule;
 
                 if (!EditorUtility.DisplayDialog($"Dependencies found for {module.nameModule}", dialogText, "Ok", Langs.cancel))
                 {
