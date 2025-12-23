@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     public float baseDonationChance = 0.05f;
 
     [Tooltip("Сколько кликов нужно сделать для гарантированного доната")]
-    public int clicksForGuaranteedDonation = 50;
+    public int clicksForGuaranteedDonation = 25;
 
     [Tooltip("Текущий счетчик кликов (только для чтения)")]
     public int currentClickPity = 0;
