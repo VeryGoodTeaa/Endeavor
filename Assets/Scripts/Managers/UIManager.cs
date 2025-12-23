@@ -1,6 +1,6 @@
-using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
+using TMPro;
+using System.Collections.Generic;
 
 public class UIManager : MonoBehaviour
 {
@@ -8,7 +8,12 @@ public class UIManager : MonoBehaviour
 
     [Header("Roots")]
     public GameObject mainScreenRoot;
-    public GameObject extraScreenRoot;
+
+
+    [Header("Cameras & Textures")]
+    public Camera extraCamera;      
+    public RenderTexture miniViewTexture; 
+    public Canvas mainCanvas;      
 
     [Header("HUD")]
     public TMP_Text attentionText;
@@ -20,7 +25,7 @@ public class UIManager : MonoBehaviour
     [Header("Donation Log")]
     public Transform donationListContainer;
     public GameObject donationItemPrefab;
-    private Queue<GameObject> donationItems = new Queue<GameObject>();
+    private Queue<DonationItem> donationItemsQueue = new Queue<DonationItem>();
 
     [Header("Popups")]
     public GameObject popupPrefab;
@@ -32,6 +37,11 @@ public class UIManager : MonoBehaviour
         modeDropdown.onValueChanged.AddListener(OnModeChanged);
     }
 
+    private void Start()
+    {
+        SetModeNormal();
+    }
+
     public void OnModeChanged(int index)
     {
         switch (index)
@@ -40,14 +50,10 @@ public class UIManager : MonoBehaviour
                 SetModeNormal();
                 break;
             case 1:
-                GameManager.Instance.currentState = GameManager.GameState.UpgradeMode;
-                mainScreenRoot.SetActive(true);
-                extraScreenRoot.SetActive(false);
+                SetModeMainUpgrade();
                 break;
             case 2:
-                GameManager.Instance.currentState = GameManager.GameState.UpgradeMode;
-                mainScreenRoot.SetActive(false);
-                extraScreenRoot.SetActive(true);
+                SetModeExtraUpgrade();
                 break;
         }
     }
@@ -56,10 +62,34 @@ public class UIManager : MonoBehaviour
     {
         GameManager.Instance.currentState = GameManager.GameState.Play;
         modeDropdown.value = 0;
+
         mainScreenRoot.SetActive(true);
-        extraScreenRoot.SetActive(false);
+        mainCanvas.enabled = true;
+        extraCamera.targetTexture = miniViewTexture;
+
         HideTooltip();
     }
+
+    void SetModeMainUpgrade()
+    {
+        GameManager.Instance.currentState = GameManager.GameState.UpgradeMode;
+
+        mainScreenRoot.SetActive(true);
+        mainCanvas.enabled = true;
+        extraCamera.targetTexture = miniViewTexture;
+    }
+
+    void SetModeExtraUpgrade()
+    {
+        GameManager.Instance.currentState = GameManager.GameState.UpgradeMode;
+
+        mainCanvas.enabled = false;
+        // Примечание: Dropdown исчезнет вместе с канвасом! 
+        // Чтобы выйти назад, нам нужно либо вынести Dropdown в отдельный Canvas, 
+        // который всегда поверх всего, либо обрабатывать нажатие ESC.
+        extraCamera.targetTexture = null;
+    }
+
 
     public void UpdateCurrencyUI()
     {
@@ -70,8 +100,8 @@ public class UIManager : MonoBehaviour
     public void ShowTooltip(float cost, float passive, float click)
     {
         tooltipObj.SetActive(true);
-        tooltipObj.transform.position = Input.mousePosition + new Vector3(100, 50, 0);
-        tooltipText.text = $"Цена: {cost}$\n+Пассивный бонус: {passive}\n+Сила клика: {click}";
+        tooltipObj.transform.position = Input.mousePosition + new Vector3(20, 20, 0);
+        tooltipText.text = $"Cost: {cost}$\n+Passive: {passive}\n+Click: {click}";
     }
 
     public void ShowMaxLevelTooltip()
@@ -81,36 +111,30 @@ public class UIManager : MonoBehaviour
         tooltipText.text = "MAX LEVEL";
     }
 
-    public void HideTooltip() => tooltipObj.SetActive(false);
+    public void HideTooltip()
+    {
+        tooltipObj.SetActive(false);
+    }
 
     public void ShowClickPopup(float amount, Vector3 pos)
     {
         Vector3 randomOffset = new Vector3(Random.Range(-50, 50), Random.Range(-50, 50), 0);
+
         GameObject popup = Instantiate(popupPrefab, pos + randomOffset, Quaternion.identity, popupContainer);
         popup.GetComponentInChildren<TMP_Text>().text = $"+{amount:F0}";
-        Destroy(popup, 0.8f); // ToDo - objects pool
     }
 
     public void AddDonationLog(float amount)
     {
-        GameObject item = Instantiate(donationItemPrefab, donationListContainer);
-        item.GetComponentInChildren<TMP_Text>().text = $"+{amount}$";
+        GameObject itemObj = Instantiate(donationItemPrefab, donationListContainer);
+        itemObj.GetComponentInChildren<TMP_Text>().text = $"+{amount:F0}";
+        DonationItem donationScript = itemObj.GetComponent<DonationItem>();
+        donationItemsQueue.Enqueue(donationScript);
 
-        donationItems.Enqueue(item);
-
-        if (donationItems.Count > 4)
+        if (donationItemsQueue.Count > 4)
         {
-            GameObject oldItem = donationItems.Dequeue();
-            Destroy(oldItem);
+            DonationItem oldItem = donationItemsQueue.Dequeue();
+            if (oldItem != null) oldItem.ForceFadeOutAndDestroy();
         }
-
-        StartCoroutine(RemoveDonationOverTime(item));
-    }
-
-    System.Collections.IEnumerator RemoveDonationOverTime(GameObject item)
-    {
-        yield return new WaitForSeconds(5f);
-        if (item != null)
-            Destroy(item);
     }
 }

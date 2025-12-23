@@ -1,3 +1,0 @@
-﻿Build path: D:/programming/Unity/Metix/Metix/Build/Desktop/Metix.exe
-Build number: 4
-PluginYG version: 2.007
