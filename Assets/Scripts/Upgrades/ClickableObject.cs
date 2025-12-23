@@ -1,6 +1,6 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Image))]
 [RequireComponent(typeof(Outline))]
@@ -21,31 +21,36 @@ public class ClickableObject : MonoBehaviour, IPointerClickHandler, IPointerEnte
         UpdateVisuals();
     }
 
-    void UpdateVisuals()
+    public void UpdateVisuals()
     {
-        if (currentLevelIndex < config.levels.Length)
-            targetImage.sprite = config.levels[currentLevelIndex].visualState;
+        if (config.levels.Length > 0 && currentLevelIndex < config.levels.Length)
+        {
+            if (currentLevelIndex > 0)
+                targetImage.sprite = config.levels[currentLevelIndex - 1].visualState;
+            //else
+            //    targetImage.sprite = config.levels[0].visualState;
+        }
+    }
+
+    public void ForceSetLevel(int level)
+    {
+        currentLevelIndex = level;
+        UpdateVisuals();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         if (GameManager.Instance.currentState == GameManager.GameState.Play)
-        {
-            float bonus = 0;
-            if (currentLevelIndex > 0)
-                bonus = config.levels[currentLevelIndex - 1].clickPowerBonus;
-
-            GameManager.Instance.HandleClick(bonus, eventData.position);
-        }
+            GameManager.Instance.HandleClick(eventData.position);
         else if (GameManager.Instance.currentState == GameManager.GameState.UpgradeMode)
             TryUpgrade();
     }
 
     void TryUpgrade()
     {
-        if (currentLevelIndex + 1 >= config.levels.Length) return;
+        if (currentLevelIndex >= config.levels.Length) return;
 
-        UpgradeLevel nextLvl = config.levels[currentLevelIndex + 1];
+        UpgradeLevel nextLvl = config.levels[currentLevelIndex];
 
         if (GameManager.Instance.money >= nextLvl.cost)
         {
@@ -58,8 +63,7 @@ public class ClickableObject : MonoBehaviour, IPointerClickHandler, IPointerEnte
     {
         currentLevelIndex++;
 
-        GameManager.Instance.currentPassiveAttention += lvl.passiveAttentionBonus;
-        GameManager.Instance.eventChanceMultiplier += lvl.eventChanceBonus;
+        GameManager.Instance.AddGlobalBonuses(lvl.clickPowerBonus, lvl.passiveAttentionBonus, lvl.eventChanceBonus);
 
         UpdateVisuals();
         ShowTooltip();
@@ -82,20 +86,14 @@ public class ClickableObject : MonoBehaviour, IPointerClickHandler, IPointerEnte
 
     void ShowTooltip()
     {
-        if (currentLevelIndex + 1 < config.levels.Length)
+        if (currentLevelIndex < config.levels.Length)
         {
-            UpgradeLevel next = config.levels[currentLevelIndex + 1];
+            UpgradeLevel next = config.levels[currentLevelIndex];
             UIManager.Instance.ShowTooltip(next.cost, next.passiveAttentionBonus, next.clickPowerBonus);
         }
         else
         {
             UIManager.Instance.ShowMaxLevelTooltip();
         }
-    }
-
-    public void ForceSetLevel(int level)
-    {
-        currentLevelIndex = level;
-        UpdateVisuals();
     }
 }

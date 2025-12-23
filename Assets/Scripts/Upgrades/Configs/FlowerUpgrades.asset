@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a4375f4fb3b90045beb90c95162aaee, type: 3}
   m_Name: FlowerUpgrades
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeConfig
-  id: 
+  id: flower
   levels: []

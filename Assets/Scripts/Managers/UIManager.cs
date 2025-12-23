@@ -1,19 +1,16 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
+    private Queue<DonationItem> donationItemsQueue = new Queue<DonationItem>();
 
     [Header("Roots")]
     public GameObject mainScreenRoot;
-
-
-    [Header("Cameras & Textures")]
-    public Camera extraCamera;      
-    public RenderTexture miniViewTexture; 
-    public Canvas mainCanvas;      
+    public GameObject extraScreenRoot;
 
     [Header("HUD")]
     public TMP_Text attentionText;
@@ -25,7 +22,7 @@ public class UIManager : MonoBehaviour
     [Header("Donation Log")]
     public Transform donationListContainer;
     public GameObject donationItemPrefab;
-    private Queue<DonationItem> donationItemsQueue = new Queue<DonationItem>();
+    private Queue<GameObject> donationItems = new Queue<GameObject>();
 
     [Header("Popups")]
     public GameObject popupPrefab;
@@ -37,11 +34,6 @@ public class UIManager : MonoBehaviour
         modeDropdown.onValueChanged.AddListener(OnModeChanged);
     }
 
-    private void Start()
-    {
-        SetModeNormal();
-    }
-
     public void OnModeChanged(int index)
     {
         switch (index)
@@ -50,10 +42,14 @@ public class UIManager : MonoBehaviour
                 SetModeNormal();
                 break;
             case 1:
-                SetModeMainUpgrade();
+                GameManager.Instance.currentState = GameManager.GameState.UpgradeMode;
+                mainScreenRoot.SetActive(true);
+                extraScreenRoot.SetActive(false);
                 break;
             case 2:
-                SetModeExtraUpgrade();
+                GameManager.Instance.currentState = GameManager.GameState.UpgradeMode;
+                mainScreenRoot.SetActive(false);
+                extraScreenRoot.SetActive(true);
                 break;
         }
     }
@@ -62,34 +58,10 @@ public class UIManager : MonoBehaviour
     {
         GameManager.Instance.currentState = GameManager.GameState.Play;
         modeDropdown.value = 0;
-
         mainScreenRoot.SetActive(true);
-        mainCanvas.enabled = true;
-        extraCamera.targetTexture = miniViewTexture;
-
+        extraScreenRoot.SetActive(false);
         HideTooltip();
     }
-
-    void SetModeMainUpgrade()
-    {
-        GameManager.Instance.currentState = GameManager.GameState.UpgradeMode;
-
-        mainScreenRoot.SetActive(true);
-        mainCanvas.enabled = true;
-        extraCamera.targetTexture = miniViewTexture;
-    }
-
-    void SetModeExtraUpgrade()
-    {
-        GameManager.Instance.currentState = GameManager.GameState.UpgradeMode;
-
-        mainCanvas.enabled = false;
-        // Примечание: Dropdown исчезнет вместе с канвасом! 
-        // Чтобы выйти назад, нам нужно либо вынести Dropdown в отдельный Canvas, 
-        // который всегда поверх всего, либо обрабатывать нажатие ESC.
-        extraCamera.targetTexture = null;
-    }
-
 
     public void UpdateCurrencyUI()
     {
@@ -119,22 +91,26 @@ public class UIManager : MonoBehaviour
     public void ShowClickPopup(float amount, Vector3 pos)
     {
         Vector3 randomOffset = new Vector3(Random.Range(-50, 50), Random.Range(-50, 50), 0);
-
         GameObject popup = Instantiate(popupPrefab, pos + randomOffset, Quaternion.identity, popupContainer);
         popup.GetComponentInChildren<TMP_Text>().text = $"+{amount:F0}";
+        Destroy(popup, 0.8f);
     }
 
     public void AddDonationLog(float amount)
     {
         GameObject itemObj = Instantiate(donationItemPrefab, donationListContainer);
         itemObj.GetComponentInChildren<TMP_Text>().text = $"+{amount:F0}";
+
         DonationItem donationScript = itemObj.GetComponent<DonationItem>();
+
         donationItemsQueue.Enqueue(donationScript);
 
         if (donationItemsQueue.Count > 4)
         {
             DonationItem oldItem = donationItemsQueue.Dequeue();
-            if (oldItem != null) oldItem.ForceFadeOutAndDestroy();
+
+            if (oldItem != null)
+                oldItem.ForceFadeOutAndDestroy();
         }
     }
 }

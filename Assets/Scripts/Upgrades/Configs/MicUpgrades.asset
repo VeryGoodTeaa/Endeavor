@@ -12,5 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a4375f4fb3b90045beb90c95162aaee, type: 3}
   m_Name: MicUpgrades
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeConfig
-  id: 
-  levels: []
+  id: mic
+  levels:
+  - levelName: 2
+    visualState: {fileID: 7519548522173406041, guid: 6480033ecf2a22540baa7d45cb3407c3, type: 3}
+    cost: 40
+    clickPowerBonus: 0
+    passiveAttentionBonus: 1
+    eventChanceBonus: 0
+  - levelName: 3
+    visualState: {fileID: 4381633816160800771, guid: 070493189746e7a4fa2a79ae564b72a1, type: 3}
+    cost: 300
+    clickPowerBonus: 3
+    passiveAttentionBonus: 6
+    eventChanceBonus: 0

@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public float money;
 
     [Header("Stats")]
+    public float baseClickPower = 1f;
     public float currentClickPower = 1f;
     public float currentPassiveAttention = 0f;
     public float eventChanceMultiplier = 1f;
@@ -97,15 +98,18 @@ public class GameManager : MonoBehaviour
 
     public void LoadGameState()
     {
-        if (!SaveSystem.HasSave()) return;
+        if (!SaveSystem.HasSave())
+        {
+            currentClickPower = baseClickPower;
+            return;
+        }
 
         SaveData data = SaveSystem.Load();
-
         money = data.money;
         attention = data.attention;
         currentClickPity = data.currentPity;
 
-        currentClickPower = 1f;
+        currentClickPower = baseClickPower;
         currentPassiveAttention = 0f;
         eventChanceMultiplier = 1f;
 
@@ -118,12 +122,12 @@ public class GameManager : MonoBehaviour
                 if (sceneItem.config.id == savedItem.id)
                 {
                     sceneItem.ForceSetLevel(savedItem.levelIndex);
+
                     RecalculateItemBonuses(sceneItem, savedItem.levelIndex);
                     break;
                 }
             }
         }
-
         UIManager.Instance.UpdateCurrencyUI();
     }
 
@@ -131,34 +135,37 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < level; i++)
         {
-            var lvlData = item.config.levels[i];
-
             if (i < item.config.levels.Length)
             {
-                var l = item.config.levels[i];
-
-                currentPassiveAttention += l.passiveAttentionBonus;
-                eventChanceMultiplier += l.eventChanceBonus;
-                // currentClickPower += l.clickPowerBonus;
+                var lvl = item.config.levels[i];
+                AddGlobalBonuses(lvl.clickPowerBonus, lvl.passiveAttentionBonus, lvl.eventChanceBonus);
             }
         }
     }
 
-    public void HandleClick(float itemClickBonus, Vector3 clickPos)
+    public void HandleClick(Vector3 clickPos)
     {
-        float amount = currentClickPower + itemClickBonus;
+        float amount = currentClickPower;
 
         attention += amount;
         UIManager.Instance.ShowClickPopup(amount, clickPos);
         UIManager.Instance.UpdateCurrencyUI();
 
         currentClickPity++;
-
         if (currentClickPity >= clicksForGuaranteedDonation)
         {
             ReceiveDonation();
             currentClickPity = 0;
         }
+    }
+
+    public void AddGlobalBonuses(float clickBonus, float passiveBonus, float eventBonus)
+    {
+        currentClickPower += clickBonus;
+        currentPassiveAttention += passiveBonus;
+        eventChanceMultiplier += eventBonus;
+
+        UIManager.Instance.UpdateCurrencyUI();
     }
 
     IEnumerator PassiveLogicRoutine()

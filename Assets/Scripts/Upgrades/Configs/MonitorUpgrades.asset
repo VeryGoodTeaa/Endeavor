@@ -12,5 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a4375f4fb3b90045beb90c95162aaee, type: 3}
   m_Name: MonitorUpgrades
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeConfig
-  id: 
-  levels: []
+  id: monitor
+  levels:
+  - levelName: 2
+    visualState: {fileID: 2084933650423168881, guid: 461dc44fcf496594f96de3dcc32d3c4f, type: 3}
+    cost: 100
+    clickPowerBonus: 1
+    passiveAttentionBonus: 1
+    eventChanceBonus: 0
+  - levelName: 3
+    visualState: {fileID: 2156139761918238425, guid: fabb88c8baa09a840b069fe76c38503b, type: 3}
+    cost: 950
+    clickPowerBonus: 5
+    passiveAttentionBonus: 6
+    eventChanceBonus: 0

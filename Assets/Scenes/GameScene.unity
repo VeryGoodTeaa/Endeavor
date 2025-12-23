@@ -3162,9 +3162,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
   mainScreenRoot: {fileID: 672190580}
-  extraCamera: {fileID: 0}
-  miniViewTexture: {fileID: 8400000, guid: ce06bdb321705354b8cefd34effe3413, type: 2}
-  mainCanvas: {fileID: 1361354425}
+  extraScreenRoot: {fileID: 1318587018}
   attentionText: {fileID: 1767165452}
   moneyText: {fileID: 1298532695}
   modeDropdown: {fileID: 1966273802}
@@ -3240,7 +3238,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -90, y: -48}
+  m_AnchoredPosition: {x: -94, y: -58}
   m_SizeDelta: {x: 130, y: 515}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &1919475840
