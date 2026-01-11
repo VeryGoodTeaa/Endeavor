@@ -113,23 +113,4 @@ public class UIManager : MonoBehaviour
                 oldItem.ForceFadeOutAndDestroy();
         }
     }
-
-    public void ShowGlitchResult(bool success, float amount, Vector3 position)
-    {
-        string text = success ? $"+{amount:F0}" : $"-{amount:F0}";
-        Color color = success ? Color.green : Color.red;
-
-        Vector3 randomOffset = new Vector3(Random.Range(-30, 30), Random.Range(-30, 30), 0);
-        GameObject popup = Instantiate(popupPrefab, position + randomOffset, Quaternion.identity, popupContainer);
-
-        TMP_Text textComponent = popup.GetComponentInChildren<TMP_Text>();
-        textComponent.text = text;
-        textComponent.color = color;
-
-        // Добавляем анимацию для визуального эффекта
-        PopupEffect popupEffect = popup.AddComponent<PopupEffect>();
-        popupEffect.Initialize(color, 1.5f); // Увеличенная длительность для лучшей видимости
-
-        Destroy(popup, 1.5f);
-    }
 }
