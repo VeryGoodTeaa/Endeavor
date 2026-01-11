@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a4375f4fb3b90045beb90c95162aaee, type: 3}
+  m_Name: CouchUpgrades
+  m_EditorClassIdentifier: Assembly-CSharp::UpgradeConfig
+  id: couch
+  levels:
+  - levelName: 2
+    visualState: {fileID: -954989655979004666, guid: 22355af602e92f44d8aca33a92b083e2, type: 3}
+    cost: 250
+    clickPowerBonus: 1
+    passiveAttentionBonus: 7
+    eventChanceBonus: 0
+  - levelName: 3
+    visualState: {fileID: 7970146073206494001, guid: 01ba545cfa2a60b479abddbb49994987, type: 3}
+    cost: 1000
+    clickPowerBonus: 1
+    passiveAttentionBonus: 7
+    eventChanceBonus: 0
