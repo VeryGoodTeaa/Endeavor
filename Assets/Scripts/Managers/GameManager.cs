@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -173,7 +174,7 @@ public class GameManager : MonoBehaviour
 
     void ReceiveDonation()
     {
-        float donationAmount = Random.Range(attention - 50, attention + 50);
+        float donationAmount = UnityEngine.Random.Range(Math.Max(attention - 50, 10), attention + 50);
         money += donationAmount;
 
         UIManager.Instance.AddDonationLog(donationAmount);

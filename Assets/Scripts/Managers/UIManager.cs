@@ -72,14 +72,14 @@ public class UIManager : MonoBehaviour
     public void ShowTooltip(float cost, float passive, float click)
     {
         tooltipObj.SetActive(true);
-        tooltipObj.transform.position = Input.mousePosition + new Vector3(20, 20, 0);
+        tooltipObj.transform.position = Input.mousePosition + new Vector3(80, 20, 0);
         tooltipText.text = $"Cost: {cost}$\n+Passive: {passive}\n+Click: {click}";
     }
 
     public void ShowMaxLevelTooltip()
     {
         tooltipObj.SetActive(true);
-        tooltipObj.transform.position = Input.mousePosition + new Vector3(20, 20, 0);
+        tooltipObj.transform.position = Input.mousePosition + new Vector3(80, 20, 0);
         tooltipText.text = "MAX LEVEL";
     }
 
@@ -99,7 +99,7 @@ public class UIManager : MonoBehaviour
     public void AddDonationLog(float amount)
     {
         GameObject itemObj = Instantiate(donationItemPrefab, donationListContainer);
-        itemObj.GetComponentInChildren<TMP_Text>().text = $"+{amount:F0}";
+        itemObj.GetComponentInChildren<TMP_Text>().text = $"{amount:F0}";
 
         DonationItem donationScript = itemObj.GetComponent<DonationItem>();
 

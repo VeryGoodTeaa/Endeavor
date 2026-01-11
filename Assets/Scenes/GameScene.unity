@@ -699,7 +699,7 @@ GameObject:
   - component: {fileID: 439436704}
   - component: {fileID: 439436707}
   - component: {fileID: 439436706}
-  m_Layer: 6
+  m_Layer: 5
   m_Name: Couch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1794,7 +1794,7 @@ GameObject:
   - component: {fileID: 852593804}
   - component: {fileID: 852593807}
   - component: {fileID: 852593806}
-  m_Layer: 6
+  m_Layer: 5
   m_Name: Flower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2123,7 +2123,7 @@ GameObject:
   - component: {fileID: 1002892404}
   - component: {fileID: 1002892407}
   - component: {fileID: 1002892406}
-  m_Layer: 6
+  m_Layer: 5
   m_Name: RoomImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2512,7 +2512,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1318587019}
-  m_Layer: 6
+  m_Layer: 5
   m_Name: RoomRoot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2707,8 +2707,8 @@ RectTransform:
   m_Children:
   - {fileID: 672190581}
   - {fileID: 1318587019}
-  - {fileID: 1966273801}
   - {fileID: 1645823094}
+  - {fileID: 1966273801}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3218,7 +3218,7 @@ GameObject:
   - component: {fileID: 1772604697}
   - component: {fileID: 1772604699}
   - component: {fileID: 1772604698}
-  m_Layer: 6
+  m_Layer: 5
   m_Name: Cat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
