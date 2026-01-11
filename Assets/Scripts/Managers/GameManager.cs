@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,17 +17,6 @@ public class GameManager : MonoBehaviour
     public float currentClickPower = 1f;
     public float currentPassiveProgress = 0f;
     public float eventChanceMultiplier = 1f;
-
-    [Header("Glitch Spawn Settings")]
-    public float minSpawnTime = 5f;
-    public float maxSpawnTime = 25f;
-    public float activeGlitchLimit = 2;
-
-    [Header("Glitch Prefab")]
-    public GameObject glitchPrefab;
-
-    private List<GlitchObject> activeGlitches = new List<GlitchObject>();
-    private Coroutine glitchSpawnCoroutine;
 
     [Header("Game States")]
     public GameState currentState = GameState.Play;
@@ -171,7 +159,7 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateCurrencyUI();
     }
 
-    private IEnumerator PassiveLogicRoutine()
+    IEnumerator PassiveLogicRoutine()
     {
         while (true)
         {
@@ -182,108 +170,6 @@ public class GameManager : MonoBehaviour
 
             UIManager.Instance.UpdateCurrencyUI();
         }
-    }
-
-    public void StartGlitchSpawning()
-    {
-        if (glitchSpawnCoroutine != null)
-        {
-            StopCoroutine(glitchSpawnCoroutine);
-        }
-
-        glitchSpawnCoroutine = StartCoroutine(GlitchSpawnRoutine());
-    }
-
-    public void StopGlitchSpawning()
-    {
-        if (glitchSpawnCoroutine != null)
-        {
-            StopCoroutine(glitchSpawnCoroutine);
-            glitchSpawnCoroutine = null;
-        }
-    }
-
-    private IEnumerator GlitchSpawnRoutine()
-    {
-        while (true)
-        {
-            float waitTime = UnityEngine.Random.Range(minSpawnTime, maxSpawnTime);
-            yield return new WaitForSeconds(waitTime);
-
-            if (activeGlitches.Count >= activeGlitchLimit)
-                continue;
-
-            AttemptToSpawnGlitch();
-        }
-    }
-
-    private void AttemptToSpawnGlitch()
-    {
-        ClickableObject[] clickableObjects = FindObjectsOfType<ClickableObject>();
-
-        if (clickableObjects.Length == 0)
-        {
-            Debug.LogWarning("Не найдено ни одного ClickableObject для спавна помехи");
-            return;
-        }
-
-        List<ClickableObject> availableObjects = new List<ClickableObject>();
-        foreach (var obj in clickableObjects)
-        {
-            GlitchObject existingGlitch = obj.GetComponentInChildren<GlitchObject>();
-            if (existingGlitch == null || !existingGlitch.IsActive())
-            {
-                availableObjects.Add(obj);
-            }
-        }
-
-        if (availableObjects.Count == 0)
-        {
-            Debug.Log("Нет доступных объектов для спавна помехи");
-            return;
-        }
-
-        ClickableObject targetObject = availableObjects[UnityEngine.Random.Range(0, availableObjects.Count)];
-
-        SpawnGlitchOnObject(targetObject);
-    }
-
-    private void SpawnGlitchOnObject(ClickableObject targetObject)
-    {
-        if (glitchPrefab == null)
-        {
-            Debug.LogError("Glitch prefab не назначен!");
-            return;
-        }
-
-        GameObject glitchInstance = Instantiate(glitchPrefab, targetObject.transform);
-
-        RectTransform glitchRect = glitchInstance.GetComponent<RectTransform>();
-        if (glitchRect != null)
-        {
-            glitchRect.anchorMin = Vector2.zero;
-            glitchRect.anchorMax = Vector2.one;
-            glitchRect.offsetMin = Vector2.zero;
-            glitchRect.offsetMax = Vector2.zero;
-        }
-
-        GlitchObject glitchEffect = glitchInstance.GetComponent<GlitchObject>();
-        if (glitchEffect == null)
-            glitchEffect = glitchInstance.AddComponent<GlitchObject>();
-
-        glitchEffect.Initialize(targetObject);
-        glitchEffect.ActivateGlitch();
-        activeGlitches.Add(glitchEffect);
-    }
-
-    public void ClearAllGlitches()
-    {
-        for (int i = activeGlitches.Count - 1; i >= 0; i--)
-        {
-            if (activeGlitches[i] != null)
-                activeGlitches[i].ForceResolve();
-        }
-        activeGlitches.Clear();
     }
 
     void ReceiveDonation()
