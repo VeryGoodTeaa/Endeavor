@@ -41,6 +41,12 @@ public class GameManager : MonoBehaviour
 
         if (autoSaveEnabled)
             StartCoroutine(AutoSaveRoutine());
+
+        // Запускаем GlitchManager, если он существует
+        if (GlitchManager.Instance != null)
+        {
+            GlitchManager.Instance.StartSpawning();
+        }
     }
 
     private void Update()
@@ -187,5 +193,14 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateCurrencyUI();
     }
 
-    private void OnApplicationQuit() => SaveGame();
+    private void OnApplicationQuit()
+    {
+        if (GlitchManager.Instance != null)
+        {
+            GlitchManager.Instance.StopSpawning();
+            GlitchManager.Instance.ClearAllGlitches();
+        }
+
+        SaveGame();
+    }
 }
