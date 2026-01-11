@@ -9,22 +9,13 @@ public class GameManager : MonoBehaviour
     [Header("Currencies")]
     public float attention;
     public float money;
+    public float moneyProgress;
 
     [Header("Stats")]
     public float baseClickPower = 1f;
     public float currentClickPower = 1f;
-    public float currentPassiveAttention = 0f;
+    public float currentPassiveProgress = 0f;
     public float eventChanceMultiplier = 1f;
-
-    [Header("Donation Settings")]
-    public float donationCheckInterval = 1f;
-    public float baseDonationChance = 0.05f;
-
-    [Tooltip("Сколько кликов нужно сделать для гарантированного доната")]
-    public int clicksForGuaranteedDonation = 25;
-
-    [Tooltip("Текущий счетчик кликов (только для чтения)")]
-    public int currentClickPity = 0;
 
     [Header("Game States")]
     public GameState currentState = GameState.Play;
@@ -60,6 +51,8 @@ public class GameManager : MonoBehaviour
             else
                 SceneManager.LoadScene("MainMenuScene");
         }
+
+        SmoothProgressBar.Instance.SetProgress(moneyProgress / 100f);
     }
 
     IEnumerator AutoSaveRoutine()
@@ -77,7 +70,6 @@ public class GameManager : MonoBehaviour
         SaveData data = new SaveData();
         data.money = money;
         data.attention = attention;
-        data.currentPity = currentClickPity;
 
         ClickableObject[] items = FindObjectsOfType<ClickableObject>(true);
         foreach (var item in items)
@@ -107,10 +99,9 @@ public class GameManager : MonoBehaviour
         SaveData data = SaveSystem.Load();
         money = data.money;
         attention = data.attention;
-        currentClickPity = data.currentPity;
 
         currentClickPower = baseClickPower;
-        currentPassiveAttention = 0f;
+        currentPassiveProgress = 0f;
         eventChanceMultiplier = 1f;
 
         ClickableObject[] sceneItems = FindObjectsOfType<ClickableObject>(true);
@@ -147,22 +138,21 @@ public class GameManager : MonoBehaviour
     {
         float amount = currentClickPower;
 
-        attention += amount;
+        moneyProgress += amount;
         UIManager.Instance.ShowClickPopup(amount, clickPos);
         UIManager.Instance.UpdateCurrencyUI();
 
-        currentClickPity++;
-        if (currentClickPity >= clicksForGuaranteedDonation)
+        if (moneyProgress >= 100)
         {
             ReceiveDonation();
-            currentClickPity = 0;
+            moneyProgress = 0;
         }
     }
 
     public void AddGlobalBonuses(float clickBonus, float passiveBonus, float eventBonus)
     {
         currentClickPower += clickBonus;
-        currentPassiveAttention += passiveBonus;
+        currentPassiveProgress += passiveBonus;
         eventChanceMultiplier += eventBonus;
 
         UIManager.Instance.UpdateCurrencyUI();
@@ -174,28 +164,16 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(1f);
 
-            attention += currentPassiveAttention;
-            if (attention < 0) attention = 0;
-
-            CheckPassiveDonationChance();
+            moneyProgress += currentPassiveProgress;
+            if (moneyProgress < 0) moneyProgress = 0;
 
             UIManager.Instance.UpdateCurrencyUI();
         }
     }
 
-    void CheckPassiveDonationChance()
-    {
-        float chance = baseDonationChance + (attention / 1000f * 0.01f);
-
-        chance = Mathf.Clamp(chance, 0f, 0.3f);
-
-        if (Random.value < chance)
-            ReceiveDonation();
-    }
-
     void ReceiveDonation()
     {
-        float donationAmount = Random.Range(10, 100);
+        float donationAmount = Random.Range(attention - 50, attention + 50);
         money += donationAmount;
 
         UIManager.Instance.AddDonationLog(donationAmount);
