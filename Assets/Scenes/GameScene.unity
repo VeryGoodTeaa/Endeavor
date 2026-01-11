@@ -2594,6 +2594,10 @@ MonoBehaviour:
   currentClickPower: 1
   currentPassiveProgress: 0
   eventChanceMultiplier: 1
+  minSpawnTime: 5
+  maxSpawnTime: 25
+  activeGlitchLimit: 2
+  glitchPrefab: {fileID: 8397838675273144406, guid: 3129b5aa24d55694db9e238aa3c7ba0c, type: 3}
   currentState: 0
   autoSaveEnabled: 1
   autoSaveInterval: 30
