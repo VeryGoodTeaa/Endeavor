@@ -126,10 +126,6 @@ public class UIManager : MonoBehaviour
         textComponent.text = text;
         textComponent.color = color;
 
-        // Добавляем анимацию для визуального эффекта
-        PopupEffect popupEffect = popup.AddComponent<PopupEffect>();
-        popupEffect.Initialize(color, 1.5f); // Увеличенная длительность для лучшей видимости
-
         Destroy(popup, 1.5f);
     }
 }
