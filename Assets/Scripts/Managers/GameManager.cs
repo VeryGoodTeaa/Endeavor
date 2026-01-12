@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
         SmoothProgressBar.Instance.SetProgress(moneyProgress / 100f);
     }
 
-    IEnumerator AutoSaveRoutine()
+    private IEnumerator AutoSaveRoutine()
     {
         while (true)
         {
@@ -166,7 +166,6 @@ public class GameManager : MonoBehaviour
 
         UIManager.Instance.ShowClickPopup(glitchRewardProgress, pos);
         UIManager.Instance.UpdateCurrencyUI();
-        Debug.Log("Glitch Fixed! Bonus applied.");
     }
 
     public void ApplyGlitchFail()
@@ -175,7 +174,6 @@ public class GameManager : MonoBehaviour
         attention = Mathf.Max(0, attention - glitchPenaltyAttention);
 
         UIManager.Instance.UpdateCurrencyUI();
-        Debug.Log("Glitch Failed! Penalty applied.");
     }
 
     public void AddGlobalBonuses(float clickBonus, float passiveBonus, float eventBonus)
@@ -187,13 +185,16 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.UpdateCurrencyUI();
     }
 
-    IEnumerator PassiveLogicRoutine()
+    private IEnumerator PassiveLogicRoutine()
     {
         while (true)
         {
             yield return new WaitForSeconds(1f);
 
-            moneyProgress += currentPassiveProgress;
+            if (currentState == GameState.UpgradeMode)
+                continue;
+
+            AddProgress(currentPassiveProgress);
             if (moneyProgress < 0) moneyProgress = 0;
 
             UIManager.Instance.UpdateCurrencyUI();
@@ -202,7 +203,7 @@ public class GameManager : MonoBehaviour
 
     void ReceiveDonation()
     {
-        float donationAmount = UnityEngine.Random.Range(Math.Max(attention - 50, 10), attention + 50);
+        float donationAmount = UnityEngine.Random.Range(Math.Max(attention - 50, 20), attention + 50);
         money += donationAmount;
 
         UIManager.Instance.AddDonationLog(donationAmount);
