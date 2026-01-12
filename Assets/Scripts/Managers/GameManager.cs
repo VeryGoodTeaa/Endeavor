@@ -21,6 +21,12 @@ public class GameManager : MonoBehaviour
     [Header("Game States")]
     public GameState currentState = GameState.Play;
 
+    [Header("Glitch Balance")]
+    public float glitchRewardProgress = 25f;
+    public float glitchRewardAttention = 10f;
+    public float glitchPenaltyProgress = 50f;
+    public float glitchPenaltyAttention = 20f;
+
     [Header("Save Settings")]
     public bool autoSaveEnabled = true;
     public float autoSaveInterval = 30f;
@@ -64,7 +70,6 @@ public class GameManager : MonoBehaviour
             SaveGame();
         }
     }
-
 
     public void SaveGame()
     {
@@ -138,9 +143,13 @@ public class GameManager : MonoBehaviour
     public void HandleClick(Vector3 clickPos)
     {
         float amount = currentClickPower;
-
-        moneyProgress += amount;
+        AddProgress(amount);
         UIManager.Instance.ShowClickPopup(amount, clickPos);
+    }
+
+    public void AddProgress(float amount)
+    {
+        moneyProgress += amount;
         UIManager.Instance.UpdateCurrencyUI();
 
         if (moneyProgress >= 100)
@@ -148,6 +157,25 @@ public class GameManager : MonoBehaviour
             ReceiveDonation();
             moneyProgress = 0;
         }
+    }
+
+    public void ApplyGlitchSuccess(Vector3 pos)
+    {
+        AddProgress(glitchRewardProgress);
+        attention += glitchRewardAttention;
+
+        UIManager.Instance.ShowClickPopup(glitchRewardProgress, pos);
+        UIManager.Instance.UpdateCurrencyUI();
+        Debug.Log("Glitch Fixed! Bonus applied.");
+    }
+
+    public void ApplyGlitchFail()
+    {
+        moneyProgress = Mathf.Max(0, moneyProgress - (moneyProgress * (glitchPenaltyProgress / 100f)));
+        attention = Mathf.Max(0, attention - glitchPenaltyAttention);
+
+        UIManager.Instance.UpdateCurrencyUI();
+        Debug.Log("Glitch Failed! Penalty applied.");
     }
 
     public void AddGlobalBonuses(float clickBonus, float passiveBonus, float eventBonus)

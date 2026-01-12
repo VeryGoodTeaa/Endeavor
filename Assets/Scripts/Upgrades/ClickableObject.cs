@@ -12,6 +12,7 @@ public class ClickableObject : MonoBehaviour, IPointerClickHandler, IPointerEnte
     private Image targetImage;
     private Outline outline;
 
+
     private void Start()
     {
         targetImage = GetComponent<Image>();
