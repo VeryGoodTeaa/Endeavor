@@ -72,14 +72,14 @@ public class UIManager : MonoBehaviour
     public void ShowTooltip(float cost, float passive, float click)
     {
         tooltipObj.SetActive(true);
-        tooltipObj.transform.position = Input.mousePosition + new Vector3(80, 20, 0);
+        tooltipObj.transform.position = Input.mousePosition + new Vector3(170, 20, 0);
         tooltipText.text = $"Cost: {cost}$\n+Passive: {passive}\n+Click: {click}";
     }
 
     public void ShowMaxLevelTooltip()
     {
         tooltipObj.SetActive(true);
-        tooltipObj.transform.position = Input.mousePosition + new Vector3(80, 20, 0);
+        tooltipObj.transform.position = Input.mousePosition + new Vector3(170, 20, 0);
         tooltipText.text = "MAX LEVEL";
     }
 

@@ -45,12 +45,6 @@ public class GlitchInstance : MonoBehaviour
 
     void SpawnVisual()
     {
-        if (glitchPrefab == null)
-        {
-            Debug.LogError("Glitch Prefab is not assigned in inspector!");
-            return;
-        }
-
         currentVisualObject = Instantiate(glitchPrefab, transform);
         currentVisualScript = currentVisualObject.GetComponent<GlitchVisual>();
         currentVisualScript.Initialize(this);

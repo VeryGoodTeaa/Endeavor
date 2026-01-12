@@ -62,8 +62,6 @@ public class GlitchManager : MonoBehaviour
             int clicks = Random.Range(minClicks, maxClicks + 1);
             
             victim.ActivateGlitch(clicks, glitchDuration);
-            
-            Debug.Log($"Glitch spawned on {victim.name}. Need {clicks} clicks.");
         }
     }
 }
