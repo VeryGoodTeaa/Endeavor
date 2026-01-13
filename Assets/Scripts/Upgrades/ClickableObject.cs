@@ -12,7 +12,6 @@ public class ClickableObject : MonoBehaviour, IPointerClickHandler, IPointerEnte
     private Image targetImage;
     private Outline outline;
 
-
     private void Start()
     {
         targetImage = GetComponent<Image>();
@@ -24,10 +23,15 @@ public class ClickableObject : MonoBehaviour, IPointerClickHandler, IPointerEnte
 
     public void UpdateVisuals()
     {
+        targetImage = GetComponent<Image>();
         if (config.levels.Length > 0 && currentLevelIndex < config.levels.Length)
         {
             if (currentLevelIndex > 0)
-                targetImage.sprite = config.levels[currentLevelIndex - 1].visualState;
+            {
+                Debug.Log($"{targetImage == null} for {config.id}/{gameObject.name}, {targetImage.name}");
+                var newSprite = config.levels[currentLevelIndex - 1].visualState;
+                targetImage.sprite = newSprite;
+            }
             //else
             //    targetImage.sprite = config.levels[0].visualState;
         }
@@ -67,7 +71,7 @@ public class ClickableObject : MonoBehaviour, IPointerClickHandler, IPointerEnte
         GameManager.Instance.AddGlobalBonuses(lvl.clickPowerBonus, lvl.passiveAttentionBonus, lvl.eventChanceBonus);
 
         UpdateVisuals();
-        ShowTooltip();
+        // ShowTooltip();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
