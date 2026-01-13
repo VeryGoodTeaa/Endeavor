@@ -3097,7 +3097,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 142fdb87286f978469072d4500188a64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GlitchInstance
-  glitchPrefab: {fileID: 3764872423845888631, guid: 3129b5aa24d55694db9e238aa3c7ba0c, type: 3}
+  glitchPrefab: {fileID: 3764872423845888631, guid: de72bfa6320cf0a45a10aa14f8832c21, type: 3}
   clicksToFix: 5
   duration: 4
   successColor: {r: 0, g: 1, b: 0, a: 1}
