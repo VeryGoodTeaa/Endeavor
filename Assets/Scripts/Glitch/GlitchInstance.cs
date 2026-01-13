@@ -43,22 +43,37 @@ public class GlitchInstance : MonoBehaviour
         glitchRoutine = StartCoroutine(GlitchTimerRoutine());
     }
 
-    void SpawnVisual()
+    private void SpawnVisual()
     {
         currentVisualObject = Instantiate(glitchPrefab, transform);
         currentVisualScript = currentVisualObject.GetComponent<GlitchVisual>();
         currentVisualScript.Initialize(this);
 
         RectTransform glitchRect = currentVisualObject.GetComponent<RectTransform>();
-        
-        float width = myRect.rect.width;
-        float height = myRect.rect.height;
 
-        float paddingX = glitchRect.rect.width / 2;
-        float paddingY = glitchRect.rect.height / 2;
+        glitchRect.anchorMin = new Vector2(0.5f, 0.5f);
+        glitchRect.anchorMax = new Vector2(0.5f, 0.5f);
+        glitchRect.pivot = new Vector2(0.5f, 0.5f);
 
-        float randomX = Random.Range(-(width / 2) + paddingX, (width / 2) - paddingX);
-        float randomY = Random.Range(-(height / 2) + paddingY, (height / 2) - paddingY);
+        Rect parentRect = myRect.rect;
+        Rect childRect = glitchRect.rect;
+
+        float paddingX = childRect.width * 0.5f;
+        float paddingY = childRect.height * 0.5f;
+
+        float safeMinX = parentRect.xMin + paddingX;
+        float safeMaxX = parentRect.xMax - paddingX;
+        float safeMinY = parentRect.yMin + paddingY;
+        float safeMaxY = parentRect.yMax - paddingY;
+
+        float randomX = 0;
+        float randomY = 0;
+
+        if (safeMaxX > safeMinX)
+            randomX = Random.Range(safeMinX, safeMaxX);
+
+        if (safeMaxY > safeMinY)
+            randomY = Random.Range(safeMinY, safeMaxY);
 
         glitchRect.anchoredPosition = new Vector2(randomX, randomY);
     }
