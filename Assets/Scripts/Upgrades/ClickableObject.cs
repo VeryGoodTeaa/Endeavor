@@ -24,7 +24,7 @@ public class ClickableObject : MonoBehaviour, IPointerClickHandler, IPointerEnte
     public void UpdateVisuals()
     {
         targetImage = GetComponent<Image>();
-        if (config.levels.Length > 0 && currentLevelIndex < config.levels.Length)
+        if (config.levels.Length > 0 && currentLevelIndex <= config.levels.Length)
         {
             if (currentLevelIndex > 0)
             {
@@ -78,6 +78,7 @@ public class ClickableObject : MonoBehaviour, IPointerClickHandler, IPointerEnte
     {
         if (GameManager.Instance.currentState == GameManager.GameState.UpgradeMode)
         {
+            Debug.Log("Pointer enter");
             outline.enabled = true;
             ShowTooltip();
         }
