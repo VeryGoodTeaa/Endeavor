@@ -105,7 +105,7 @@ public class UIManager : MonoBehaviour
 
         popup.GetComponentInChildren<TMP_Text>().text = text;
         popup.GetComponentInChildren<TMP_Text>().fontSize = size;
-        Destroy(popup, 1f);
+        Destroy(popup, 1.5f);
     }
 
     public void AddDonationLog(float amount)
