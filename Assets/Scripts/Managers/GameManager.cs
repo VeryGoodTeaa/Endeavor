@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,23 +10,30 @@ public class GameManager : MonoBehaviour
 
     [Header("Currencies")]
     public float attention;
-    public float money;
-    public float moneyProgress;
+    public float money;          
+    public float moneyProgress;   
 
-    [Header("Stats")]
-    public float baseClickPower = 1f;
-    public float currentClickPower = 1f;
-    public float currentPassiveProgress = 0f;
-    public float eventChanceMultiplier = 1f;
+    [Header("Balancing - Base Stats")]
+    public float baseClickPower = 0.5f;      
+    public float baseAttentionGrowth = 1.0f; 
+    
+    [Header("Balancing - Dynamic")]
+    public float currentClickPower;
+    public float currentAttentionGrowth;     
+    public float currentEventChance = 1f;
+
+    private float streamStabilityMultiplier = 1f; 
 
     [Header("Game States")]
     public GameState currentState = GameState.Play;
 
     [Header("Glitch Balance")]
-    public float glitchRewardProgress = 25f;
-    public float glitchRewardAttention = 10f;
-    public float glitchPenaltyProgress = 50f;
-    public float glitchPenaltyAttention = 20f;
+    public float glitchRewardProgress = 35f;   
+    public float glitchRewardAttention = 50f;  
+    
+    public float glitchPenaltyProgress = 100f; 
+    public float glitchPenaltyAttention = 5f;  
+    public float penaltyDuration = 5f;      
 
     [Header("Save Settings")]
     public bool autoSaveEnabled = true;
@@ -42,11 +50,8 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         LoadGameState();
-
-        StartCoroutine(PassiveLogicRoutine());
-
-        if (autoSaveEnabled)
-            StartCoroutine(AutoSaveRoutine());
+        StartCoroutine(PassiveLogicRoutine()); 
+        if (autoSaveEnabled) StartCoroutine(AutoSaveRoutine());
     }
 
     private void Update()
@@ -62,15 +67,137 @@ public class GameManager : MonoBehaviour
         SmoothProgressBar.Instance.SetProgress(moneyProgress / 100f);
     }
 
-    private IEnumerator AutoSaveRoutine()
+    public void HandleClick(Vector3 clickPos)
     {
-        while (true)
+        float amount = currentClickPower; 
+        AddProgress(amount);
+        UIManager.Instance.ShowClickPopup(amount, clickPos);
+    }
+
+    public void AddProgress(float amount)
+    {
+        moneyProgress += amount;
+        
+        if (moneyProgress > 100) moneyProgress = 100; 
+        if (moneyProgress < 0) moneyProgress = 0;
+
+        UIManager.Instance.UpdateCurrencyUI();
+
+        if (moneyProgress >= 100)
         {
-            yield return new WaitForSeconds(autoSaveInterval);
-            SaveGame();
+            ReceiveDonation();
+            moneyProgress = 0;
         }
     }
 
+    public void ApplyGlitchSuccess(Vector3 pos)
+    {
+        AddProgress(glitchRewardProgress);
+        attention += glitchRewardAttention;
+
+        UIManager.Instance.ShowClickPopup(glitchRewardProgress, pos);
+        UIManager.Instance.UpdateCurrencyUI();
+    }
+
+    public void ApplyGlitchFail()
+    {
+        moneyProgress = 0; 
+        attention = Mathf.Max(0, attention - glitchPenaltyAttention);
+
+        StartCoroutine(StabilityPenaltyRoutine());
+
+        UIManager.Instance.UpdateCurrencyUI();
+    }
+
+    IEnumerator StabilityPenaltyRoutine()
+    {
+        streamStabilityMultiplier = 0.1f; 
+        Debug.Log("Stream Unstable! Audience growth halted.");
+        
+        yield return new WaitForSeconds(penaltyDuration);
+        
+        streamStabilityMultiplier = 1f;
+        Debug.Log("Stream Stabilized.");
+    }
+
+    IEnumerator PassiveLogicRoutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(1f);
+
+            if (currentState == GameState.UpgradeMode) continue;
+
+            float growth = (baseAttentionGrowth + currentAttentionGrowth) * streamStabilityMultiplier;
+            
+            attention += growth;
+            
+            if (attention < 0) attention = 0;
+            UIManager.Instance.UpdateCurrencyUI();
+        }
+    }
+
+    void ReceiveDonation()
+    {
+        float modifier = UnityEngine.Random.Range(0.8f, 1.2f);
+        float donationAmount = (attention * 0.1f) * modifier + 10;
+
+        money += donationAmount;
+
+        UIManager.Instance.AddDonationLog(donationAmount);
+        UIManager.Instance.UpdateCurrencyUI();
+    }
+
+    public void AddGlobalBonuses(float clickBonus, float attentionBonus, float eventBonus)
+    {
+        currentClickPower += clickBonus;
+        currentAttentionGrowth += attentionBonus;
+        currentEventChance += eventBonus;
+
+        UIManager.Instance.UpdateCurrencyUI();
+    }
+
+    public void LoadGameState()
+    {
+        if (!SaveSystem.HasSave())
+        {
+            ResetStats();
+            return;
+        }
+
+        SaveData data = SaveSystem.Load();
+        money = data.money;
+        attention = data.attention;
+
+        ResetStats();
+
+        ClickableObject[] sceneItems = FindObjectsOfType<ClickableObject>(true);
+        foreach (var savedItem in data.items)
+        {
+            foreach (var sceneItem in sceneItems)
+            {
+                if (sceneItem.config.id == savedItem.id)
+                {
+                    sceneItem.ForceSetLevel(savedItem.levelIndex);
+                    RecalculateItemBonuses(sceneItem, savedItem.levelIndex);
+                    break;
+                }
+            }
+        }
+        UIManager.Instance.UpdateCurrencyUI();
+    }
+
+    void ResetStats()
+    {
+        currentClickPower = baseClickPower;
+        currentAttentionGrowth = 0;
+        currentEventChance = 1f;
+    }
+
+    // ... Остальные методы (SaveGame, RecalculateItemBonuses, SpendMoney и т.д.) без изменений ...
+
+    IEnumerator AutoSaveRoutine() { while (true) { yield return new WaitForSeconds(autoSaveInterval); SaveGame(); } }
+    
     public void SaveGame()
     {
         SaveData data = new SaveData();
@@ -94,127 +221,15 @@ public class GameManager : MonoBehaviour
         SaveSystem.Save(data);
     }
 
-    public void LoadGameState()
-    {
-        if (!SaveSystem.HasSave())
-        {
-            currentClickPower = baseClickPower;
-            return;
-        }
-
-        SaveData data = SaveSystem.Load();
-        money = data.money;
-        attention = data.attention;
-
-        currentClickPower = baseClickPower;
-        currentPassiveProgress = 0f;
-        eventChanceMultiplier = 1f;
-
-        ClickableObject[] sceneItems = FindObjectsOfType<ClickableObject>(true);
-
-        foreach (var savedItem in data.items)
-        {
-            foreach (var sceneItem in sceneItems)
-            {
-                if (sceneItem.config.id == savedItem.id)
-                {
-                    sceneItem.ForceSetLevel(savedItem.levelIndex);
-
-                    RecalculateItemBonuses(sceneItem, savedItem.levelIndex);
-                    break;
-                }
-            }
-        }
-        UIManager.Instance.UpdateCurrencyUI();
-    }
-
-    void RecalculateItemBonuses(ClickableObject item, int level)
-    {
-        for (int i = 0; i < level; i++)
-        {
-            if (i < item.config.levels.Length)
-            {
+    void RecalculateItemBonuses(ClickableObject item, int level) {
+         for (int i = 0; i < level; i++) {
+            if (i < item.config.levels.Length) {
                 var lvl = item.config.levels[i];
                 AddGlobalBonuses(lvl.clickPowerBonus, lvl.passiveAttentionBonus, lvl.eventChanceBonus);
             }
         }
     }
 
-    public void HandleClick(Vector3 clickPos)
-    {
-        float amount = currentClickPower;
-        AddProgress(amount);
-        UIManager.Instance.ShowClickPopup(amount, clickPos);
-    }
-
-    public void AddProgress(float amount)
-    {
-        moneyProgress += amount;
-        UIManager.Instance.UpdateCurrencyUI();
-
-        if (moneyProgress >= 100)
-        {
-            ReceiveDonation();
-            moneyProgress = 0;
-        }
-    }
-
-    public void ApplyGlitchSuccess(Vector3 pos)
-    {
-        AddProgress(glitchRewardProgress);
-        attention += glitchRewardAttention;
-
-        UIManager.Instance.ShowClickPopup(glitchRewardProgress, pos);
-        UIManager.Instance.UpdateCurrencyUI();
-    }
-
-    public void ApplyGlitchFail()
-    {
-        moneyProgress = Mathf.Max(0, moneyProgress - (moneyProgress * (glitchPenaltyProgress / 100f)));
-        attention = Mathf.Max(0, attention - glitchPenaltyAttention);
-
-        UIManager.Instance.UpdateCurrencyUI();
-    }
-
-    public void AddGlobalBonuses(float clickBonus, float passiveBonus, float eventBonus)
-    {
-        currentClickPower += clickBonus;
-        currentPassiveProgress += passiveBonus;
-        eventChanceMultiplier += eventBonus;
-
-        UIManager.Instance.UpdateCurrencyUI();
-    }
-
-    private IEnumerator PassiveLogicRoutine()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(1f);
-
-            if (currentState == GameState.UpgradeMode)
-                continue;
-
-            AddProgress(currentPassiveProgress);
-            if (moneyProgress < 0) moneyProgress = 0;
-
-            UIManager.Instance.UpdateCurrencyUI();
-        }
-    }
-
-    void ReceiveDonation()
-    {
-        float donationAmount = UnityEngine.Random.Range(Math.Max(attention - 50, 20), attention + 50);
-        money += donationAmount;
-
-        UIManager.Instance.AddDonationLog(donationAmount);
-        UIManager.Instance.UpdateCurrencyUI();
-    }
-
-    public void SpendMoney(float amount)
-    {
-        money -= amount;
-        UIManager.Instance.UpdateCurrencyUI();
-    }
-
+    public void SpendMoney(float amount) { money -= amount; UIManager.Instance.UpdateCurrencyUI(); }
     private void OnApplicationQuit() => SaveGame();
 }
