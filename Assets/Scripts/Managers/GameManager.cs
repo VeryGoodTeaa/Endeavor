@@ -14,8 +14,8 @@ public class GameManager : MonoBehaviour
     public float moneyProgress;   
 
     [Header("Balancing - Base Stats")]
-    public float baseClickPower = 0.5f;      
-    public float baseAttentionGrowth = 1.0f; 
+    public float baseClickPower = 0.1f;      
+    public float baseAttentionGrowth = 0.5f; 
     
     [Header("Balancing - Dynamic")]
     public float currentClickPower;
@@ -84,7 +84,6 @@ public class GameManager : MonoBehaviour
         monitorClickMult = click;
         monitorAttentionMult = attention;
         monitorDonationMult = donation;
-        Debug.Log($"Stream Mode Changed: Click x{click}, Att x{attention}, Cash x{donation}");
     }
 
     public void AddProgress(float amount)
@@ -142,8 +141,8 @@ public class GameManager : MonoBehaviour
 
             float growth = (baseAttentionGrowth + currentAttentionGrowth) * streamStabilityMultiplier * monitorAttentionMult;
 
-            float rawPassiveProgress = (attention * 0.02f) * streamStabilityMultiplier;
-            float finalPassiveProgress = Mathf.Min(rawPassiveProgress, 10);
+            float rawPassiveProgress = (attention * 0.01f) * streamStabilityMultiplier;
+            float finalPassiveProgress = Mathf.Min(rawPassiveProgress, 5);
 
             if (finalPassiveProgress > 0)
                 AddProgress(finalPassiveProgress);
@@ -211,8 +210,6 @@ public class GameManager : MonoBehaviour
         currentAttentionGrowth = 0;
         currentEventChance = 1f;
     }
-
-    // ... Остальные методы (SaveGame, RecalculateItemBonuses, SpendMoney и т.д.) без изменений ...
 
     IEnumerator AutoSaveRoutine() { while (true) { yield return new WaitForSeconds(autoSaveInterval); SaveGame(); } }
     

@@ -8,8 +8,8 @@ public class GlitchManager : MonoBehaviour
     public static GlitchManager Instance;
 
     [Header("Spawning Settings")]
-    public float minSpawnTime = 5f;
-    public float maxSpawnTime = 15f;
+    public float minSpawnTime = 3f;
+    public float maxSpawnTime = 10f;
     
     [Header("Difficulty")]
     public int minClicks = 3;
