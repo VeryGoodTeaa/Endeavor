@@ -76,6 +76,8 @@ public class GlitchInstance : MonoBehaviour
             randomY = Random.Range(safeMinY, safeMaxY);
 
         glitchRect.anchoredPosition = new Vector2(randomX, randomY);
+
+        Debug.Log($"Glitch spawned at {glitchRect.anchoredPosition} within parent {gameObject.name}");
     }
 
     public void RegisterClick()

@@ -1500,7 +1500,6 @@ GameObject:
   - component: {fileID: 585119751}
   - component: {fileID: 585119754}
   - component: {fileID: 585119753}
-  - component: {fileID: 585119755}
   m_Layer: 5
   m_Name: Mouse
   m_TagString: Untagged
@@ -1595,23 +1594,6 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
---- !u!114 &585119755
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 585119749}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 142fdb87286f978469072d4500188a64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GlitchInstance
-  glitchPrefab: {fileID: 3764872423845888631, guid: 3129b5aa24d55694db9e238aa3c7ba0c, type: 3}
-  clicksToFix: 5
-  duration: 4
-  successColor: {r: 0, g: 1, b: 0, a: 1}
-  failColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &642880106
 GameObject:
   m_ObjectHideFlags: 0
@@ -2353,7 +2335,6 @@ GameObject:
   - component: {fileID: 952735570}
   - component: {fileID: 952735573}
   - component: {fileID: 952735572}
-  - component: {fileID: 952735574}
   m_Layer: 5
   m_Name: Monitor
   m_TagString: Untagged
@@ -2454,23 +2435,6 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
---- !u!114 &952735574
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 952735568}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 142fdb87286f978469072d4500188a64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GlitchInstance
-  glitchPrefab: {fileID: 3764872423845888631, guid: 3129b5aa24d55694db9e238aa3c7ba0c, type: 3}
-  clicksToFix: 3
-  duration: 4
-  successColor: {r: 0, g: 1, b: 0, a: 1}
-  failColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &963418268
 GameObject:
   m_ObjectHideFlags: 0
@@ -2517,7 +2481,7 @@ GameObject:
   - component: {fileID: 1000498822}
   - component: {fileID: 1000498823}
   m_Layer: 5
-  m_Name: rec
+  m_Name: MouserGlitchRect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3320,7 +3284,7 @@ GameObject:
   - component: {fileID: 1433372137}
   - component: {fileID: 1433372134}
   m_Layer: 5
-  m_Name: rec
+  m_Name: MonitorGlitchRect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4253,7 +4217,7 @@ GameObject:
   - component: {fileID: 1852916966}
   - component: {fileID: 1852916967}
   m_Layer: 5
-  m_Name: rect
+  m_Name: MicGlitchRect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
