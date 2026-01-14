@@ -2388,7 +2388,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2084933650423168881, guid: 461dc44fcf496594f96de3dcc32d3c4f, type: 3}
+  m_Sprite: {fileID: 6946590925052441426, guid: 56291ca2a6332244181ca013fb6e91b3, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2481,7 +2481,7 @@ GameObject:
   - component: {fileID: 1000498822}
   - component: {fileID: 1000498823}
   m_Layer: 5
-  m_Name: MouserGlitchRect
+  m_Name: MouseGlitchRect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3640,7 +3640,6 @@ GameObject:
   - component: {fileID: 1713989727}
   - component: {fileID: 1713989730}
   - component: {fileID: 1713989729}
-  - component: {fileID: 1713989731}
   m_Layer: 5
   m_Name: Mic
   m_TagString: Untagged
@@ -3735,23 +3734,6 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
---- !u!114 &1713989731
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1713989725}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 142fdb87286f978469072d4500188a64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GlitchInstance
-  glitchPrefab: {fileID: 3764872423845888631, guid: de72bfa6320cf0a45a10aa14f8832c21, type: 3}
-  clicksToFix: 5
-  duration: 4
-  successColor: {r: 0, g: 1, b: 0, a: 1}
-  failColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &1744326946
 GameObject:
   m_ObjectHideFlags: 0
