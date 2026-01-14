@@ -583,7 +583,6 @@ GameObject:
   - component: {fileID: 282805204}
   - component: {fileID: 282805207}
   - component: {fileID: 282805206}
-  - component: {fileID: 282805208}
   m_Layer: 5
   m_Name: Keyboard
   m_TagString: Untagged
@@ -602,13 +601,14 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1996615836}
   m_Father: {fileID: 672190581}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 310, y: 18}
-  m_SizeDelta: {x: 950, y: 150}
+  m_AnchoredPosition: {x: 401, y: 8.13}
+  m_SizeDelta: {x: 950, y: 274.496}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &282805204
 MonoBehaviour:
@@ -630,7 +630,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -4932681258939991581, guid: 8f7830501c5d2cb4a8f4ab7e05768472, type: 3}
+  m_Sprite: {fileID: -4909202519158366556, guid: 921001fb66496f94ab0eb8699ea56af4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -677,23 +677,6 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
---- !u!114 &282805208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 282805202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 142fdb87286f978469072d4500188a64, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GlitchInstance
-  glitchPrefab: {fileID: 3764872423845888631, guid: 3129b5aa24d55694db9e238aa3c7ba0c, type: 3}
-  clicksToFix: 5
-  duration: 4
-  successColor: {r: 0, g: 1, b: 0, a: 1}
-  failColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1 &331277963
 GameObject:
   m_ObjectHideFlags: 0
@@ -1073,7 +1056,7 @@ GameObject:
   - component: {fileID: 459952024}
   - component: {fileID: 459952023}
   - component: {fileID: 459952025}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: ProgressBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1877,7 +1860,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 653955844}
-  m_Layer: 5
+  - component: {fileID: 653955845}
+  m_Layer: 2
   m_Name: Money
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1906,6 +1890,18 @@ RectTransform:
   m_AnchoredPosition: {x: 74.4, y: -78.8}
   m_SizeDelta: {x: 176.538, y: 54.201}
   m_Pivot: {x: 0, y: 1}
+--- !u!225 &653955845
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653955843}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &672190580
 GameObject:
   m_ObjectHideFlags: 0
@@ -2258,7 +2254,7 @@ GameObject:
   - component: {fileID: 938843185}
   - component: {fileID: 938843187}
   - component: {fileID: 938843186}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: MoneyImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2665,7 +2661,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.7279968, y: 13.575}
+  m_AnchoredPosition: {x: 0.7279968, y: 13.575012}
   m_SizeDelta: {x: 60.945, y: 27.15}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1044340812
@@ -2888,9 +2884,9 @@ RectTransform:
   - {fileID: 272051407}
   m_Father: {fileID: 952735569}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -510, y: -154.85}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 187.5, y: 279.15}
   m_SizeDelta: {x: 180, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1298532693
@@ -2904,7 +2900,7 @@ GameObject:
   - component: {fileID: 1298532694}
   - component: {fileID: 1298532696}
   - component: {fileID: 1298532695}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: MoneyText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3306,8 +3302,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 3.9450073, y: 75.47998}
-  m_SizeDelta: {x: 1207.89, y: 629.04}
+  m_AnchoredPosition: {x: 119.78, y: 31.863}
+  m_SizeDelta: {x: 1015.4, y: 398.975}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1433372134
 MonoBehaviour:
@@ -3745,7 +3741,7 @@ GameObject:
   - component: {fileID: 1744326947}
   - component: {fileID: 1744326949}
   - component: {fileID: 1744326948}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4252,7 +4248,7 @@ GameObject:
   - component: {fileID: 1919475839}
   - component: {fileID: 1919475840}
   - component: {fileID: 1919475841}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Donations
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4580,6 +4576,59 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1966273800}
   m_CullTransparentMesh: 1
+--- !u!1 &1996615835
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1996615836}
+  - component: {fileID: 1996615837}
+  m_Layer: 5
+  m_Name: KeyboardGlitchRect
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1996615836
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1996615835}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 282805203}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 169, y: -29.174}
+  m_SizeDelta: {x: 481.917, y: 91.494}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1996615837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1996615835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 142fdb87286f978469072d4500188a64, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlitchInstance
+  glitchPrefab: {fileID: 3764872423845888631, guid: 3129b5aa24d55694db9e238aa3c7ba0c, type: 3}
+  clicksToFix: 5
+  duration: 4
+  successColor: {r: 0, g: 1, b: 0, a: 1}
+  failColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

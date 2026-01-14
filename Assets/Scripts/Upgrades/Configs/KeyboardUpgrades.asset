@@ -15,7 +15,7 @@ MonoBehaviour:
   id: keyboard
   levels:
   - levelName: 2
-    visualState: {fileID: -4909202519158366556, guid: 996e4785bfc582a4dbce94f255cae5d6, type: 3}
+    visualState: {fileID: -4909202519158366556, guid: 921001fb66496f94ab0eb8699ea56af4, type: 3}
     cost: 250
     clickPowerBonus: 0.8
     passiveAttentionBonus: 1
