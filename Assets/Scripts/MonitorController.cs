@@ -69,7 +69,7 @@ public class MonitorController : MonoBehaviour, IPointerClickHandler
         UIManager.Instance.ShowClickPopup($"Monitor theme changed:\n" +
             $"Click: x{mode.clickMultiplier}\n" +
             $"Attention: x{mode.attentionMultiplier}\n" +
-            $"Doantion: x{mode.donationMultiplier}", transform.position, 2f, 50);
+            $"Doantion: x{mode.donationMultiplier}", transform.position, true, 50);
     }
 
     System.Collections.IEnumerator AnimateSwitch()
