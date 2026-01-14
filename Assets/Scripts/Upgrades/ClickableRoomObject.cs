@@ -4,17 +4,16 @@ using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(Image))]
 [RequireComponent(typeof(Outline))]
-public class ClickableObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+public class ClickableRoomObject : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public UpgradeConfig config;
     public int currentLevelIndex = 0;
 
-    private Image targetImage;
+    public Image targetImage;
     private Outline outline;
 
     private void Start()
     {
-        targetImage = GetComponent<Image>();
         outline = GetComponent<Outline>();
         outline.enabled = false;
 
@@ -23,7 +22,6 @@ public class ClickableObject : MonoBehaviour, IPointerClickHandler, IPointerEnte
 
     public void UpdateVisuals()
     {
-        targetImage = GetComponent<Image>();
         if (config.levels.Length > 0 && currentLevelIndex <= config.levels.Length)
         {
             if (currentLevelIndex > 0)
@@ -31,12 +29,7 @@ public class ClickableObject : MonoBehaviour, IPointerClickHandler, IPointerEnte
                 var newSprite = config.levels[currentLevelIndex - 1].visualState;
                 targetImage.sprite = newSprite;
 
-                if (gameObject.name == "RoomImage")
-                    UIManager.Instance.RoomImage.GetComponent<Image>().sprite = newSprite;
-                else if (gameObject.name == "Couch")
-                    UIManager.Instance.CouchImage.GetComponent<Image>().sprite = newSprite;
-                else if (gameObject.name == "Flower")
-                    UIManager.Instance.FlowerImage.GetComponent<Image>().sprite = newSprite;
+                UIManager.Instance.RoomImage.GetComponent<Image>().sprite = newSprite;
             }
             //else
             //    targetImage.sprite = config.levels[0].visualState;
@@ -77,7 +70,7 @@ public class ClickableObject : MonoBehaviour, IPointerClickHandler, IPointerEnte
         GameManager.Instance.AddGlobalBonuses(lvl.clickPowerBonus, lvl.passiveAttentionBonus, lvl.eventChanceBonus);
 
         UpdateVisuals();
-        // ShowTooltip();
+        ShowTooltip();
     }
 
     public void OnPointerEnter(PointerEventData eventData)

@@ -142,6 +142,13 @@ public class GameManager : MonoBehaviour
 
             float growth = (baseAttentionGrowth + currentAttentionGrowth) * streamStabilityMultiplier * monitorAttentionMult;
 
+            float rawPassiveProgress = (attention * 0.02f) * streamStabilityMultiplier;
+            float finalPassiveProgress = Mathf.Min(rawPassiveProgress, 10);
+
+            if (finalPassiveProgress > 0)
+                AddProgress(finalPassiveProgress);
+
+
             attention += growth;
             if (attention < 0) attention = 0;
 

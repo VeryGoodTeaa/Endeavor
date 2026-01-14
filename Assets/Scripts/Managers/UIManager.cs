@@ -29,6 +29,11 @@ public class UIManager : MonoBehaviour
     public GameObject popupMonitorPrefap;
     public Transform popupContainer;
 
+    [Header("WebCam")]
+    public GameObject RoomImage;
+    public GameObject CouchImage;
+    public GameObject FlowerImage;
+
     private void Awake()
     {
         Instance = this;
@@ -73,7 +78,7 @@ public class UIManager : MonoBehaviour
     public void ShowTooltip(float cost, float passive, float click)
     {
         tooltipObj.SetActive(true);
-        tooltipObj.transform.position = Input.mousePosition + new Vector3(150, 20, 0);
+        tooltipObj.transform.position = Input.mousePosition + new Vector3(100, 20, 0);
         tooltipText.text = $"Cost: {cost}$\n+Passive: {passive}\n+Click: {click}";
     }
 
