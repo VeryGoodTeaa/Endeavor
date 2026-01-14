@@ -129,10 +129,10 @@ TextureImporter:
       name: monitor2_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 38
         y: 0
-        width: 2004
-        height: 1231
+        width: 4052
+        height: 2566
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

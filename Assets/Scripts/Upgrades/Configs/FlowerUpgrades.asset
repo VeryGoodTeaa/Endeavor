@@ -15,8 +15,14 @@ MonoBehaviour:
   id: flower
   levels:
   - levelName: 2
-    visualState: {fileID: -75210064195565137, guid: bba27bf080f6146429263f9e9697022a, type: 3}
+    visualState: {fileID: -75210064195565137, guid: 580f25792fef7ed4d8c2346b9481bd99, type: 3}
     cost: 250
     clickPowerBonus: 0
-    passiveAttentionBonus: 2
+    passiveAttentionBonus: 1
+    eventChanceBonus: 0
+  - levelName: 2
+    visualState: {fileID: 21300000, guid: 9eb73466848d8144393982582469741b, type: 3}
+    cost: 1000
+    clickPowerBonus: 0
+    passiveAttentionBonus: 4
     eventChanceBonus: 0
