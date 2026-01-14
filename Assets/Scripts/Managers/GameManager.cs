@@ -33,7 +33,12 @@ public class GameManager : MonoBehaviour
     
     public float glitchPenaltyProgress = 100f; 
     public float glitchPenaltyAttention = 5f;  
-    public float penaltyDuration = 5f;      
+    public float penaltyDuration = 5f;
+
+    [Header("Monitor Modifiers")]
+    public float monitorClickMult = 1f;     
+    public float monitorAttentionMult = 1f; 
+    public float monitorDonationMult = 1f;
 
     [Header("Save Settings")]
     public bool autoSaveEnabled = true;
@@ -69,9 +74,17 @@ public class GameManager : MonoBehaviour
 
     public void HandleClick(Vector3 clickPos)
     {
-        float amount = currentClickPower; 
+        float amount = currentClickPower * monitorClickMult;
         AddProgress(amount);
-        UIManager.Instance.ShowClickPopup(amount, clickPos);
+        UIManager.Instance.ShowClickPopup($"+{amount}", clickPos);
+    }
+
+    public void SetMonitorBonuses(float click, float attention, float donation)
+    {
+        monitorClickMult = click;
+        monitorAttentionMult = attention;
+        monitorDonationMult = donation;
+        Debug.Log($"Stream Mode Changed: Click x{click}, Att x{attention}, Cash x{donation}");
     }
 
     public void AddProgress(float amount)
@@ -95,7 +108,7 @@ public class GameManager : MonoBehaviour
         AddProgress(glitchRewardProgress);
         attention += glitchRewardAttention;
 
-        UIManager.Instance.ShowClickPopup(glitchRewardProgress, pos);
+        UIManager.Instance.ShowClickPopup($"{glitchRewardProgress}", pos);
         UIManager.Instance.UpdateCurrencyUI();
     }
 
@@ -125,14 +138,13 @@ public class GameManager : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(1f);
-
             if (currentState == GameState.UpgradeMode) continue;
 
-            float growth = (baseAttentionGrowth + currentAttentionGrowth) * streamStabilityMultiplier;
-            
+            float growth = (baseAttentionGrowth + currentAttentionGrowth) * streamStabilityMultiplier * monitorAttentionMult;
+
             attention += growth;
-            
             if (attention < 0) attention = 0;
+
             UIManager.Instance.UpdateCurrencyUI();
         }
     }
@@ -140,10 +152,9 @@ public class GameManager : MonoBehaviour
     void ReceiveDonation()
     {
         float modifier = UnityEngine.Random.Range(0.8f, 1.2f);
-        float donationAmount = (attention * 0.1f) * modifier + 10;
+        float donationAmount = ((attention * 0.1f) * modifier + 10) * monitorDonationMult;
 
         money += donationAmount;
-
         UIManager.Instance.AddDonationLog(donationAmount);
         UIManager.Instance.UpdateCurrencyUI();
     }

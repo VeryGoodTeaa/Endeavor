@@ -88,12 +88,13 @@ public class UIManager : MonoBehaviour
         tooltipObj.SetActive(false);
     }
 
-    public void ShowClickPopup(float amount, Vector3 pos)
+    public void ShowClickPopup(string text, Vector3 pos, float lifeTime = 0.8f, int size = 30)
     {
         Vector3 randomOffset = new Vector3(Random.Range(-50, 50), Random.Range(-50, 50), 0);
         GameObject popup = Instantiate(popupPrefab, pos + randomOffset, Quaternion.identity, popupContainer);
-        popup.GetComponentInChildren<TMP_Text>().text = $"+{amount:F0}";
-        Destroy(popup, 0.8f);
+        popup.GetComponentInChildren<TMP_Text>().text = text;
+        popup.GetComponentInChildren<TMP_Text>().fontSize = size;
+        Destroy(popup, lifeTime);
     }
 
     public void AddDonationLog(float amount)

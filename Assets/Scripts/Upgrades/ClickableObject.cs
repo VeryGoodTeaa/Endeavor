@@ -28,7 +28,6 @@ public class ClickableObject : MonoBehaviour, IPointerClickHandler, IPointerEnte
         {
             if (currentLevelIndex > 0)
             {
-                Debug.Log($"{targetImage == null} for {config.id}/{gameObject.name}, {targetImage.name}");
                 var newSprite = config.levels[currentLevelIndex - 1].visualState;
                 targetImage.sprite = newSprite;
             }
@@ -78,7 +77,6 @@ public class ClickableObject : MonoBehaviour, IPointerClickHandler, IPointerEnte
     {
         if (GameManager.Instance.currentState == GameManager.GameState.UpgradeMode)
         {
-            Debug.Log("Pointer enter");
             outline.enabled = true;
             ShowTooltip();
         }

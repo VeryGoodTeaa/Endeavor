@@ -16,7 +16,7 @@ MonoBehaviour:
   levels:
   - levelName: 2
     visualState: {fileID: -4909202519158366556, guid: 996e4785bfc582a4dbce94f255cae5d6, type: 3}
-    cost: 200
-    clickPowerBonus: 5
-    passiveAttentionBonus: 3
+    cost: 250
+    clickPowerBonus: 0.8
+    passiveAttentionBonus: 1
     eventChanceBonus: 0

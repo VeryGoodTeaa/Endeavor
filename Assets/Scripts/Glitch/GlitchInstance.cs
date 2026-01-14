@@ -58,8 +58,8 @@ public class GlitchInstance : MonoBehaviour
         Rect parentRect = myRect.rect;
         Rect childRect = glitchRect.rect;
 
-        float paddingX = childRect.width / 3;
-        float paddingY = childRect.height / 3;
+        float paddingX = childRect.width * 0.75f;
+        float paddingY = childRect.height * 0.75f;
 
         float safeMinX = parentRect.xMin + paddingX;
         float safeMaxX = parentRect.xMax - paddingX;
