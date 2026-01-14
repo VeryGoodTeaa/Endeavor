@@ -13,4 +13,10 @@ MonoBehaviour:
   m_Name: FlowerUpgrades
   m_EditorClassIdentifier: Assembly-CSharp::UpgradeConfig
   id: flower
-  levels: []
+  levels:
+  - levelName: 2
+    visualState: {fileID: -75210064195565137, guid: bba27bf080f6146429263f9e9697022a, type: 3}
+    cost: 250
+    clickPowerBonus: 0
+    passiveAttentionBonus: 2
+    eventChanceBonus: 0
